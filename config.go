@@ -13,15 +13,27 @@ type GeneralConfig struct {
 	SkipRatio          float32
 	PlaylistSkipRatio  float32
 	DefaultComment     string
+	DefaultChannel     []string
 	MaxTrackDuration   int
 	AutomaticShuffleOn bool
 }
 
+// ConnectionConfig contains configuration variables for connection options.
+type ConnectionConfig struct {
+	ServerAddress  string
+	ServerPort     int
+	ServerPassword string
+	RetryEnabled   bool
+	RetryAttempts  int
+	RetryInterval  int
+}
+
 // CacheConfig contains configuration variables for cache options.
 type CacheConfig struct {
-	Enabled     bool
-	MaximumSize int64
-	ExpireTime  float64
+	Enabled              bool
+	MaximumSizeMebibytes int64
+	ExpireTime           float64
+	CheckInterval        int
 }
 
 // VolumeConfig contains configuration variables for volume options.
@@ -81,6 +93,7 @@ type PermissionsConfig struct {
 // BotConfig is a configuration struct that houses all the above configurations.
 type BotConfig struct {
 	General     GeneralConfig
+	Connection  ConnectionConfig
 	Cache       CacheConfig
 	Volume      VolumeConfig
 	Aliases     AliasConfig
@@ -98,10 +111,19 @@ func NewDefaultConfig() *BotConfig {
 			MaxTrackDuration:   0,
 			AutomaticShuffleOn: false,
 		},
+		Connection: ConnectionConfig{
+			ServerAddress:  "127.0.0.1",
+			ServerPort:     64738,
+			ServerPassword: "",
+			RetryEnabled:   true,
+			RetryAttempts:  10,
+			RetryInterval:  10,
+		},
 		Cache: CacheConfig{
-			Enabled:     false,
-			MaximumSize: 512,
-			ExpireTime:  24,
+			Enabled:              false,
+			MaximumSizeMebibytes: 512,
+			ExpireTime:           24,
+			CheckInterval:        5,
 		},
 		Volume: VolumeConfig{
 			DefaultVolume: 0.2,
