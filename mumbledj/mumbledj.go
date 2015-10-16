@@ -5,7 +5,7 @@
  * Copyright (c) 2014, 2015 Matthieu Grieger (MIT License)
  */
 
-package main
+package mumbledj
 
 import (
 	"log"
@@ -34,7 +34,7 @@ type MumbleDJ struct {
 // OnConnect event. First moves MumbleDJ into default channel if one exists. The
 // configuration is loaded and the audio stream is set up.
 func (dj *MumbleDJ) OnConnect(e *gumble.ConnectEvent) {
-	dj.Client.Self.Move(dj.Client.Channels.Find(dj.Config.General.DefaultChannel))
+	dj.Client.Self.Move(dj.Client.Channels.Find(dj.Config.General.DefaultChannel...))
 
 	dj.AudioStream = gumble_ffmpeg.New(dj.Client)
 	dj.AudioStream.Volume = float32(dj.Config.Volume.DefaultVolume)
@@ -42,7 +42,7 @@ func (dj *MumbleDJ) OnConnect(e *gumble.ConnectEvent) {
 	dj.Client.Self.SetComment(dj.Config.General.DefaultComment)
 
 	if dj.Config.Cache.Enabled {
-		dj.Cache.Update()
+		dj.Cache.UpdateStats()
 		go dj.Cache.CleanPeriodically()
 	}
 }
@@ -81,7 +81,7 @@ func (dj *MumbleDJ) OnTextMessage(e *gumble.TextMessageEvent) {
 	plainMessage := gumbleutil.PlainText(&e.TextMessage)
 	if len(plainMessage) != 0 {
 		if plainMessage[0] == dj.Config.General.CommandPrefix[0] && plainMessage != dj.Config.General.CommandPrefix {
-			dj.Command.Execute(e.Sender, plainMessage[1:])
+			//dj.Command.Execute(e.Sender, plainMessage[1:])
 		}
 	}
 }
@@ -112,7 +112,7 @@ func (dj *MumbleDJ) AddSkip(user *gumble.User, skipType SkipType) {
 func (dj *MumbleDJ) RemoveSkip(user *gumble.User, skipType SkipType) {
 	for i, username := range dj.Skips[skipType] {
 		if username == user.Name {
-			dj.Skips[skipType] = append(dj.Skips[skipType][:i], dj.Skips[skipType][i+1]...)
+			dj.Skips[skipType] = append(dj.Skips[skipType][:i], dj.Skips[skipType][i+1:]...)
 			dj.Log.Printf("%s's skip has been successfully removed from this item.\n", user.Name)
 			return
 		}
@@ -150,5 +150,5 @@ func (dj *MumbleDJ) SendPrivateMessage(user *gumble.User, message string) {
 // Start attempts to connect the bot to the server and performs necessary startup
 // operations.
 func (dj *MumbleDJ) Start() error {
-
+	return nil
 }

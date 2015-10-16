@@ -5,7 +5,7 @@
  * Copyright (c) 2014, 2015 Matthieu Grieger (MIT License)
  */
 
-package main
+package mumbledj
 
 // GeneralConfig contains configuration variables for general options.
 type GeneralConfig struct {

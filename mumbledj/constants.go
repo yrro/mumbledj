@@ -5,7 +5,7 @@
  * Copyright (c) 2014, 2015 Matthieu Grieger (MIT License)
  */
 
-package main
+package mumbledj
 
 // SkipType represents either a current track skip or a current playlist skip.
 type SkipType int

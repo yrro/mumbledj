@@ -7,7 +7,11 @@
 
 package commands
 
+import "github.com/matthieugrieger/mumbledj/mumbledj"
+
 // CommandExecutor contains logic that parses user text messages for commands
 // and executes the commands.
 type CommandExecutor struct {
+	Commands []Command
+	Bot      *mumbledj.MumbleDJ
 }
