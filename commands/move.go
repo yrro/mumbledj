@@ -6,3 +6,6 @@
  */
 
 package commands
+
+// Move is a command that moves the bot into another Mumble channel.
+type Move Command

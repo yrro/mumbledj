@@ -6,3 +6,6 @@
  */
 
 package commands
+
+// CacheSize is a command that reports the current size of the cache.
+type CacheSize Command

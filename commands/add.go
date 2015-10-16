@@ -6,3 +6,6 @@
  */
 
 package commands
+
+// Add is a command that adds audio files to the audio queue.
+type Add Command

@@ -6,3 +6,7 @@
  */
 
 package commands
+
+// Reload is a command that reloads the configuration file and updates all
+// configuration values.
+type Reload Command

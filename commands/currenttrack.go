@@ -6,3 +6,7 @@
  */
 
 package commands
+
+// CurrentTrack is a command that reports the name of the audio track that is
+// currently playing.
+type CurrentTrack Command

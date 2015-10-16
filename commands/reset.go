@@ -6,3 +6,6 @@
  */
 
 package commands
+
+// Reset is a command that completely resets the audio queue.
+type Reset Command

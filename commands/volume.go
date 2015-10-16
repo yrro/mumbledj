@@ -6,3 +6,6 @@
  */
 
 package commands
+
+// Volume is a command that changes the volume of the audio output.
+type Volume Command

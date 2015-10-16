@@ -6,3 +6,6 @@
  */
 
 package commands
+
+// Kill is a command that safely cleans the bot environment and terminates it.
+type Kill Command

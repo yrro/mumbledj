@@ -6,3 +6,6 @@
  */
 
 package commands
+
+// SetComment is a command that sets the comment of the bot within the Mumble server.
+type SetComment Command

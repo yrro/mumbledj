@@ -6,3 +6,7 @@
  */
 
 package commands
+
+// NextTrack is a command that reports the name of the audio track that is
+// up next in the queue.
+type NextTrack Command

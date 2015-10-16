@@ -6,3 +6,7 @@
  */
 
 package commands
+
+// NumTracks is a command that reports the number of tracks currently in the
+// audio queue.
+type NumTracks Command

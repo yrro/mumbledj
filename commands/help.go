@@ -6,3 +6,7 @@
  */
 
 package commands
+
+// Help is a command that outputs a help message that shows available commands
+// and what they do.
+type Help Command
