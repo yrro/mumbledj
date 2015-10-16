@@ -8,9 +8,33 @@
 package main
 
 import (
+	"errors"
+	"fmt"
 	"io/ioutil"
+	"os"
+	"sort"
 	"time"
 )
+
+// SortFilesByAge is a type that holds file information for cached items.
+type SortFilesByAge []os.FileInfo
+
+// Len returns the length of the file slice.
+func (a SortFilesByAge) Len() int {
+	return len(a)
+}
+
+// Swap swaps two elements in the file slice.
+func (a SortFilesByAge) Swap(i, j int) {
+	a[i], a[j] = a[j], a[i]
+}
+
+// Less compares two file modification times to determine if one is less than
+// the other. Returns true if the item in index i is older than the item in
+// index j, false otherwise.
+func (a SortFilesByAge) Less(i, j int) bool {
+	return time.Since(a[i].ModTime()) < time.Since(a[j].ModTime())
+}
 
 // AudioCache keeps track of the filesize of the audio cache and provides
 // methods for pruning the cache.
@@ -70,10 +94,14 @@ func (c *AudioCache) CleanPeriodically() {
 	for range time.Tick(time.Duration(c.CheckInterval) * time.Minute) {
 		files, _ := ioutil.ReadDir(c.Directory)
 		for _, file := range files {
-			// NOTE: Some sort of safe-guard must be put in place to make
-			// sure that a file isn't deleted when it is being actively played.
+			// It is safe to check the modification time because when audio
+			// files are played their modification time is updated. This ensures
+			// that audio files will not get deleted while they are playing, assuming
+			// a reasonable expiry time is set in the configuration.
 			hours := time.Since(file.ModTime()).Hours()
-			// TODO: Finish the rest of this function.
+			if hours >= c.ExpireTime {
+				os.Remove(fmt.Sprintf("%s/%s", c.Directory, file.Name()))
+			}
 		}
 	}
 }
@@ -81,5 +109,10 @@ func (c *AudioCache) CleanPeriodically() {
 // RemoveOldest deletes the oldest file in the cache.
 func (c *AudioCache) RemoveOldest() error {
 	files, _ := ioutil.ReadDir(c.Directory)
-	// TODO: Finish the rest of this function, add sort type.
+	if len(files) > 0 {
+		sort.Sort(SortFilesByAge(files))
+		os.Remove(fmt.Sprintf("%s/%s", c.Directory, files[0].Name()))
+		return nil
+	}
+	return errors.New("There are no files currently cached.")
 }
