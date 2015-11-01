@@ -1,7 +1,7 @@
 /*
  * MumbleDJ
  * By Matthieu Grieger
- * config.go
+ * mumbledj/config.go
  * Copyright (c) 2014, 2015 Matthieu Grieger (MIT License)
  */
 

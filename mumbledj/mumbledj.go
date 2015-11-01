@@ -1,7 +1,7 @@
 /*
  * MumbleDJ
  * By Matthieu Grieger
- * mumbledj.go
+ * mumbledj/mumbledj.go
  * Copyright (c) 2014, 2015 Matthieu Grieger (MIT License)
  */
 
