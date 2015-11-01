@@ -1,7 +1,7 @@
 /*
  * MumbleDJ
  * By Matthieu Grieger
- * mumbledj/cache.go
+ * mumbledj/audiocache.go
  * Copyright (c) 2014, 2015 Matthieu Grieger (MIT License)
  */
 
@@ -115,4 +115,24 @@ func (c *AudioCache) RemoveOldest() error {
 		return nil
 	}
 	return errors.New("There are no files currently cached.")
+}
+
+// NumFiles returns the number of audio files currently cached.
+func (c *AudioCache) NumFiles() int {
+	return c.NumAudioFiles
+}
+
+// TotalSize returns the total file size of the cache in bytes.
+func (c *AudioCache) TotalSize() int64 {
+	return c.TotalFileSize
+}
+
+// MaximumSize returns the maximum file size of the cache in bytes.
+func (c *AudioCache) MaximumSize() int64 {
+	return c.MaximumSize
+}
+
+// Directory returns the directory in which audio files are cached.
+func (c *AudioCache) Directory() string {
+	return c.Directory
 }
