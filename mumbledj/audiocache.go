@@ -117,22 +117,22 @@ func (c *AudioCache) RemoveOldest() error {
 	return errors.New("There are no files currently cached.")
 }
 
-// NumFiles returns the number of audio files currently cached.
-func (c *AudioCache) NumFiles() int {
+// NumCachedFiles returns the number of audio files currently cached.
+func (c *AudioCache) NumCachedFiles() int {
 	return c.NumAudioFiles
 }
 
-// TotalSize returns the total file size of the cache in bytes.
-func (c *AudioCache) TotalSize() int64 {
+// TotalCacheSize returns the total file size of the cache in bytes.
+func (c *AudioCache) TotalCacheSize() int64 {
 	return c.TotalFileSize
 }
 
-// MaximumSize returns the maximum file size of the cache in bytes.
-func (c *AudioCache) MaximumSize() int64 {
+// MaximumCacheSize returns the maximum file size of the cache in bytes.
+func (c *AudioCache) MaximumCacheSize() int64 {
 	return c.MaximumSize
 }
 
-// Directory returns the directory in which audio files are cached.
-func (c *AudioCache) Directory() string {
+// CacheDirectory returns the directory in which audio files are cached.
+func (c *AudioCache) CacheDirectory() string {
 	return c.Directory
 }

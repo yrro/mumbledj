@@ -10,8 +10,8 @@ package interfaces
 // Cache is an interface that defines methods for retrieving audio tracks
 // that are stored within a cache.
 type Cache interface {
-	NumFiles() int
-	TotalSize() int64
-	MaximumSize() int64
-	Directory() string
+	NumCachedFiles() int
+	TotalCacheSize() int64
+	MaximumCacheSize() int64
+	CacheDirectory() string
 }

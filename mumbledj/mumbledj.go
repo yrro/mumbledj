@@ -14,13 +14,13 @@ import (
 	"github.com/layeh/gumble/gumble"
 	"github.com/layeh/gumble/gumble_ffmpeg"
 	"github.com/layeh/gumble/gumbleutil"
-	"github.com/matthieugrieger/mumbledj/commands"
+	"github.com/matthieugrieger/mumbledj/objects"
 )
 
 // MumbleDJ is a struct that keeps track of all aspects of the bot's state.
 type MumbleDJ struct {
 	GumbleConfig gumble.Config
-	Config       *BotConfig
+	Config       *objects.Config
 	Client       *gumble.Client
 	KeepAlive    chan bool
 	Queue        *AudioQueue
@@ -28,7 +28,7 @@ type MumbleDJ struct {
 	Skips        map[SkipType][]string
 	Cache        *AudioCache
 	Log          log.Logger
-	Command      *commands.CommandExecutor
+	Commander    *Commander
 }
 
 // OnConnect event. First moves MumbleDJ into default channel if one exists. The

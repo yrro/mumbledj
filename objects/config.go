@@ -1,11 +1,11 @@
 /*
  * MumbleDJ
  * By Matthieu Grieger
- * mumbledj/config.go
+ * objects/config.go
  * Copyright (c) 2014, 2015 Matthieu Grieger (MIT License)
  */
 
-package mumbledj
+package objects
 
 // GeneralConfig contains configuration variables for general options.
 type GeneralConfig struct {
@@ -90,8 +90,8 @@ type PermissionsConfig struct {
 	AdminShuffleToggle bool
 }
 
-// BotConfig is a configuration struct that houses all the above configurations.
-type BotConfig struct {
+// Config is a configuration struct that houses all the above configurations.
+type Config struct {
 	General     GeneralConfig
 	Connection  ConnectionConfig
 	Cache       CacheConfig
@@ -101,8 +101,8 @@ type BotConfig struct {
 }
 
 // NewDefaultConfig returns a BotConfig filled with default values.
-func NewDefaultConfig() *BotConfig {
-	return &BotConfig{
+func NewDefaultConfig() *Config {
+	return &Config{
 		General: GeneralConfig{
 			CommandPrefix:      "!",
 			SkipRatio:          0.5,

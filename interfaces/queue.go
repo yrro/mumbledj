@@ -14,4 +14,5 @@ type Queue interface {
 	PeekNextTrack() (Track, error)
 	Traverse(visit func(i int, t Track))
 	ShuffleTracks()
+	Queue() []Track
 }

@@ -12,9 +12,6 @@ import "github.com/layeh/gumble/gumble"
 // Bot is an interface that defines all of the available methods for interacting
 // with the bot.
 type Bot interface {
-	Config() *Config
-	Queue() *Queue
-	Cache() *Cache
 	AddSkip(user *gumble.User, skipType int)
 	RemoveSkip(user *gumble.User, skipType int)
 	ResetSkips(skipType int)
