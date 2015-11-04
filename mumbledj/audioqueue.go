@@ -13,13 +13,13 @@ import (
 	"time"
 
 	"github.com/matthieugrieger/mumbledj/interfaces"
+	"github.com/spf13/viper"
 )
 
 // AudioQueue holds the audio queue itself along with useful methods for
 // performing actions on the queue.
 type AudioQueue struct {
-	Queue              []interfaces.Track
-	AutomaticShuffleOn bool
+	Queue []interfaces.Track
 }
 
 func init() {
@@ -54,7 +54,7 @@ func (q *AudioQueue) CurrentTrack() (interfaces.Track, error) {
 // PeekNextTrack peeks at the next Track and returns it.
 func (q *AudioQueue) PeekNextTrack() (interfaces.Track, error) {
 	if len(q.Queue) > 1 {
-		if q.AutomaticShuffleOn {
+		if viper.GetBool("general.automaticshuffleon") {
 			q.RandomNextTrack(false)
 		}
 		return q.Queue[1], nil

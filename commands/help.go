@@ -10,32 +10,22 @@ package commands
 import (
 	"github.com/layeh/gumble/gumble"
 	"github.com/matthieugrieger/mumbledj/objects"
+	"github.com/spf13/viper"
 )
 
 // HelpCommand is a command that outputs a help message that shows the available
 // commands and their aliases.
-type HelpCommand struct {
-	CurrentAliases []string
-	IsAdminCommand bool
-}
-
-// NewHelpCommand returns a new HelpCommand object.
-func NewHelpCommand(aliases []string, isAdmin bool) *HelpCommand {
-	return &HelpCommand{
-		CurrentAliases: aliases,
-		IsAdminCommand: isAdmin,
-	}
-}
+type HelpCommand struct{}
 
 // Aliases is a method that returns the current aliases for the add command.
 func (c *HelpCommand) Aliases() []string {
-	return c.CurrentAliases
+	return viper.GetStringSlice("aliases.help")
 }
 
 // IsAdmin is a command that returns a bool that determines if a command is an
 // admin command or not.
 func (c *HelpCommand) IsAdmin() bool {
-	return c.IsAdminCommand
+	return viper.GetBool("permissions.help")
 }
 
 // Execute executes the command with the given bot state, user, and arguments.

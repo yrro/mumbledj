@@ -10,31 +10,21 @@ package commands
 import (
 	"github.com/layeh/gumble/gumble"
 	"github.com/matthieugrieger/mumbledj/objects"
+	"github.com/spf13/viper"
 )
 
 // ReloadCommand is a command that reloads the configuration values for the bot.
-type ReloadCommand struct {
-	CurrentAliases []string
-	IsAdminCommand bool
-}
-
-// NewReloadCommand returns a new ReloadCommand object.
-func NewReloadCommand(aliases []string, isAdmin bool) *ReloadCommand {
-	return &ReloadCommand{
-		CurrentAliases: aliases,
-		IsAdminCommand: isAdmin,
-	}
-}
+type ReloadCommand struct{}
 
 // Aliases is a method that returns the current aliases for the add command.
 func (c *ReloadCommand) Aliases() []string {
-	return c.CurrentAliases
+	return viper.GetStringSlice("aliases.reload")
 }
 
 // IsAdmin is a command that returns a bool that determines if a command is an
 // admin command or not.
 func (c *ReloadCommand) IsAdmin() bool {
-	return c.IsAdminCommand
+	return viper.GetBool("permissions.reload")
 }
 
 // Execute executes the command with the given bot state, user, and arguments.

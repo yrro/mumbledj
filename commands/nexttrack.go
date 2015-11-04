@@ -10,31 +10,21 @@ package commands
 import (
 	"github.com/layeh/gumble/gumble"
 	"github.com/matthieugrieger/mumbledj/objects"
+	"github.com/spf13/viper"
 )
 
 // NextTrackCommand is a command that outputs the next track in the audio queue (if exists).
-type NextTrackCommand struct {
-	CurrentAliases []string
-	IsAdminCommand bool
-}
-
-// NewNextTrackCommand returns a new NextTrackCommand object.
-func NewNextTrackCommand(aliases []string, isAdmin bool) *NextTrackCommand {
-	return &NextTrackCommand{
-		CurrentAliases: aliases,
-		IsAdminCommand: isAdmin,
-	}
-}
+type NextTrackCommand struct{}
 
 // Aliases is a method that returns the current aliases for the add command.
 func (c *NextTrackCommand) Aliases() []string {
-	return c.CurrentAliases
+	return viper.GetStringSlice("aliases.nexttrack")
 }
 
 // IsAdmin is a command that returns a bool that determines if a command is an
 // admin command or not.
 func (c *NextTrackCommand) IsAdmin() bool {
-	return c.IsAdminCommand
+	return viper.GetBool("permissions.nexttrack")
 }
 
 // Execute executes the command with the given bot state, user, and arguments.

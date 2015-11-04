@@ -10,31 +10,21 @@ package commands
 import (
 	"github.com/layeh/gumble/gumble"
 	"github.com/matthieugrieger/mumbledj/objects"
+	"github.com/spf13/viper"
 )
 
 // VolumeCommand is a command that changes the volume of the audio output.
-type VolumeCommand struct {
-	CurrentAliases []string
-	IsAdminCommand bool
-}
-
-// NewVolumeCommand returns a new VolumeCommand object.
-func NewVolumeCommand(aliases []string, isAdmin bool) *VolumeCommand {
-	return &VolumeCommand{
-		CurrentAliases: aliases,
-		IsAdminCommand: isAdmin,
-	}
-}
+type VolumeCommand struct{}
 
 // Aliases is a method that returns the current aliases for the add command.
 func (c *VolumeCommand) Aliases() []string {
-	return c.CurrentAliases
+	return viper.GetStringSlice("aliases.volume")
 }
 
 // IsAdmin is a command that returns a bool that determines if a command is an
 // admin command or not.
 func (c *VolumeCommand) IsAdmin() bool {
-	return c.IsAdminCommand
+	return viper.GetBool("permissions.volume")
 }
 
 // Execute executes the command with the given bot state, user, and arguments.

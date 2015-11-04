@@ -10,32 +10,22 @@ package commands
 import (
 	"github.com/layeh/gumble/gumble"
 	"github.com/matthieugrieger/mumbledj/objects"
+	"github.com/spf13/viper"
 )
 
 // NumCachedCommand is a command that outputs the number of audio tracks that
 // are currently cached on disk.
-type NumCachedCommand struct {
-	CurrentAliases []string
-	IsAdminCommand bool
-}
-
-// NewNumCachedCommand returns a new NumCachedCommand object.
-func NewNumCachedCommand(aliases []string, isAdmin bool) *NumCachedCommand {
-	return &NumCachedCommand{
-		CurrentAliases: aliases,
-		IsAdminCommand: isAdmin,
-	}
-}
+type NumCachedCommand struct{}
 
 // Aliases is a method that returns the current aliases for the add command.
 func (c *NumCachedCommand) Aliases() []string {
-	return c.CurrentAliases
+	return viper.GetStringSlice("aliases.numcached")
 }
 
 // IsAdmin is a command that returns a bool that determines if a command is an
 // admin command or not.
 func (c *NumCachedCommand) IsAdmin() bool {
-	return c.IsAdminCommand
+	return viper.GetBool("permissions.numcached")
 }
 
 // Execute executes the command with the given bot state, user, and arguments.

@@ -8,6 +8,7 @@
 package mumbledj
 
 import (
+	"github.com/matthieugrieger/mumbledj/commands"
 	"github.com/matthieugrieger/mumbledj/interfaces"
 	"github.com/matthieugrieger/mumbledj/objects"
 )
@@ -20,7 +21,23 @@ type Commander struct {
 
 // NewCommander returns a new commander with an initialized command list.
 func NewCommander(config *objects.AliasConfig) *Commander {
-	commands := []*interfaces.Command{}
+	commands := []*interfaces.Command{
+		&commands.AddCommand,
+		&commands.CacheSizeCommand,
+		&commands.CurrentTrackCommand,
+		&commands.HelpCommand,
+		&commands.KillCommand,
+		&commands.MoveCommand,
+		&commands.NextTrackCommand,
+		&commands.NumCachedCommand,
+		&commands.NumTracksCommand,
+		&commands.ReloadCommand,
+		&commands.ResetCommand,
+		&commands.SetCommentCommand,
+		&commands.ShuffleCommand,
+		&commands.SkipCommand,
+		&commands.VolumeCommand,
+	}
 
 	return &Commander{
 		Commands: commands,

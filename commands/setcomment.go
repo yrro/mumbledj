@@ -10,31 +10,21 @@ package commands
 import (
 	"github.com/layeh/gumble/gumble"
 	"github.com/matthieugrieger/mumbledj/objects"
+	"github.com/spf13/viper"
 )
 
 // SetCommentCommand is a command that changes the Mumble comment of the bot.
-type SetCommentCommand struct {
-	CurrentAliases []string
-	IsAdminCommand bool
-}
-
-// NewSetCommentCommand returns a new SetCommentCommand object.
-func NewSetCommentCommand(aliases []string, isAdmin bool) *SetCommentCommand {
-	return &SetCommentCommand{
-		CurrentAliases: aliases,
-		IsAdminCommand: isAdmin,
-	}
-}
+type SetCommentCommand struct{}
 
 // Aliases is a method that returns the current aliases for the add command.
 func (c *SetCommentCommand) Aliases() []string {
-	return c.CurrentAliases
+	return viper.GetStringSlice("aliases.setcomment")
 }
 
 // IsAdmin is a command that returns a bool that determines if a command is an
 // admin command or not.
 func (c *SetCommentCommand) IsAdmin() bool {
-	return c.IsAdminCommand
+	return viper.GetBool("permissions.setcomment")
 }
 
 // Execute executes the command with the given bot state, user, and arguments.

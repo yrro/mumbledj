@@ -15,6 +15,7 @@ import (
 	"github.com/layeh/gumble/gumble_ffmpeg"
 	"github.com/layeh/gumble/gumbleutil"
 	"github.com/matthieugrieger/mumbledj/objects"
+	"github.com/spf13/viper"
 )
 
 // MumbleDJ is a struct that keeps track of all aspects of the bot's state.
@@ -34,14 +35,14 @@ type MumbleDJ struct {
 // OnConnect event. First moves MumbleDJ into default channel if one exists. The
 // configuration is loaded and the audio stream is set up.
 func (dj *MumbleDJ) OnConnect(e *gumble.ConnectEvent) {
-	dj.Client.Self.Move(dj.Client.Channels.Find(dj.Config.General.DefaultChannel...))
+	dj.Client.Self.Move(dj.Client.Channels.Find(viper.GetStringSlice("general.defaultchannel")...))
 
 	dj.AudioStream = gumble_ffmpeg.New(dj.Client)
-	dj.AudioStream.Volume = float32(dj.Config.Volume.DefaultVolume)
+	dj.AudioStream.Volume = float32(viper.GetFloat64("volume.default"))
 
-	dj.Client.Self.SetComment(dj.Config.General.DefaultComment)
+	dj.Client.Self.SetComment(viper.GetString("general.defaultcomment"))
 
-	if dj.Config.Cache.Enabled {
+	if viper.GetBool("cache.enabled") {
 		dj.Cache.UpdateStats()
 		go dj.Cache.CleanPeriodically()
 	}
@@ -50,20 +51,20 @@ func (dj *MumbleDJ) OnConnect(e *gumble.ConnectEvent) {
 // OnDisconnect event. Terminates MumbleDJ thread, or retries connection if
 // automatic connection retries are enabled.
 func (dj *MumbleDJ) OnDisconnect(e *gumble.DisconnectEvent) {
-	if dj.Config.Connection.RetryEnabled && (e.Type == gumble.DisconnectError || e.Type == gumble.DisconnectKicked) {
+	if viper.GetBool("connection.retryenabled") && (e.Type == gumble.DisconnectError || e.Type == gumble.DisconnectKicked) {
 		dj.Log.Printf("Disconnected from server. Retrying connection every %d seconds %d times.\n",
-			dj.Config.Connection.RetryInterval,
-			dj.Config.Connection.RetryAttempts)
+			viper.GetInt("connection.retryinterval"),
+			viper.GetInt("connection.retryattempts"))
 
 		success := false
-		for retries := 0; retries < dj.Config.Connection.RetryAttempts; retries++ {
+		for retries := 0; retries < viper.GetInt("connection.retryattempts"); retries++ {
 			dj.Log.Println("Retrying connection...")
 			if err := dj.Client.Connect(); err == nil {
 				dj.Log.Println("Successfully reconnected to the server!")
 				success = true
 				break
 			}
-			time.Sleep(time.Duration(dj.Config.Connection.RetryInterval) * time.Second)
+			time.Sleep(time.Duration(viper.GetInt("connection.retryinterval")) * time.Second)
 		}
 		if !success {
 			dj.KeepAlive <- true
@@ -80,7 +81,7 @@ func (dj *MumbleDJ) OnDisconnect(e *gumble.DisconnectEvent) {
 func (dj *MumbleDJ) OnTextMessage(e *gumble.TextMessageEvent) {
 	plainMessage := gumbleutil.PlainText(&e.TextMessage)
 	if len(plainMessage) != 0 {
-		if plainMessage[0] == dj.Config.General.CommandPrefix[0] && plainMessage != dj.Config.General.CommandPrefix {
+		if plainMessage[0] == viper.GetString("general.commandprefix")[0] && plainMessage != viper.GetString("general.commandprefix") {
 			//dj.Command.Execute(e.Sender, plainMessage[1:])
 		}
 	}
@@ -128,8 +129,8 @@ func (dj *MumbleDJ) ResetSkips(skipType SkipType) {
 // HasPermission checks if a particular user has the necessary permissions to execute a command.
 // Permissions are specified in the user configuration if it exists.
 func (dj *MumbleDJ) HasPermission(user *gumble.User, isAdminCommand bool) bool {
-	if dj.Config.Permissions.AdminsEnabled && isAdminCommand {
-		for _, username := range dj.Config.Permissions.Admins {
+	if viper.GetBool("permissions.adminsenabled") && isAdminCommand {
+		for _, username := range viper.GetStringSlice("permissions.admins") {
 			if username == user.Name {
 				return true
 			}

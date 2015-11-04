@@ -10,31 +10,21 @@ package commands
 import (
 	"github.com/layeh/gumble/gumble"
 	"github.com/matthieugrieger/mumbledj/objects"
+	"github.com/spf13/viper"
 )
 
 // CacheSizeCommand is a command that outputs the current size of the cache.
-type CacheSizeCommand struct {
-	CurrentAliases []string
-	IsAdminCommand bool
-}
-
-// NewCacheSizeCommand returns a new CacheSizeCommand object.
-func NewCacheSizeCommand(aliases []string, isAdmin bool) *CacheSizeCommand {
-	return &CacheSizeCommand{
-		CurrentAliases: aliases,
-		IsAdminCommand: isAdmin,
-	}
-}
+type CacheSizeCommand struct{}
 
 // Aliases is a method that returns the current aliases for the cachesize command.
 func (c *CacheSizeCommand) Aliases() []string {
-	return c.CurrentAliases
+	return viper.GetStringSlice("aliases.cachesize")
 }
 
 // IsAdmin is a command that returns a bool that determines if a command is an
 // admin command or not.
 func (c *CacheSizeCommand) IsAdmin() bool {
-	return c.IsAdminCommand
+	return viper.GetBool("permissions.cachesize")
 }
 
 // Execute executes the command with the given bot state, user, and arguments.

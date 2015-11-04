@@ -10,31 +10,21 @@ package commands
 import (
 	"github.com/layeh/gumble/gumble"
 	"github.com/matthieugrieger/mumbledj/objects"
+	"github.com/spf13/viper"
 )
 
 // ShuffleCommand is a command that shuffles the audio queue.
-type ShuffleCommand struct {
-	CurrentAliases []string
-	IsAdminCommand bool
-}
-
-// NewShuffleCommand returns a new ShuffleCommand object.
-func NewShuffleCommand(aliases []string, isAdmin bool) *ShuffleCommand {
-	return &ShuffleCommand{
-		CurrentAliases: aliases,
-		IsAdminCommand: isAdmin,
-	}
-}
+type ShuffleCommand struct{}
 
 // Aliases is a method that returns the current aliases for the add command.
 func (c *ShuffleCommand) Aliases() []string {
-	return c.CurrentAliases
+	return viper.GetStringSlice("aliases.shuffle")
 }
 
 // IsAdmin is a command that returns a bool that determines if a command is an
 // admin command or not.
 func (c *ShuffleCommand) IsAdmin() bool {
-	return c.IsAdminCommand
+	return viper.GetBool("permissions.shuffle")
 }
 
 // Execute executes the command with the given bot state, user, and arguments.

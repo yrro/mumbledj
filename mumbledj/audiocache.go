@@ -14,6 +14,8 @@ import (
 	"os"
 	"sort"
 	"time"
+
+	"github.com/spf13/viper"
 )
 
 // SortFilesByAge is a type that holds file information for cached items.
@@ -41,21 +43,13 @@ func (a SortFilesByAge) Less(i, j int) bool {
 type AudioCache struct {
 	NumAudioFiles int
 	TotalFileSize int64
-	MaximumSize   int64
-	Directory     string
-	ExpireTime    float64
-	CheckInterval int
 }
 
 // NewAudioCache creates an empty AudioCache.
-func NewAudioCache(maximumSize int64, directory string, expireTime float64, checkInterval int) *AudioCache {
+func NewAudioCache() *AudioCache {
 	newCache := &AudioCache{
 		NumAudioFiles: 0,
 		TotalFileSize: 0,
-		MaximumSize:   maximumSize,
-		Directory:     directory,
-		ExpireTime:    expireTime,
-		CheckInterval: checkInterval,
 	}
 	return newCache
 }
@@ -64,7 +58,7 @@ func NewAudioCache(maximumSize int64, directory string, expireTime float64, chec
 // cache and updates the member variables accordingly.
 func (c *AudioCache) GetCurrentStatistics() (int, int64) {
 	var totalSize int64
-	files, _ := ioutil.ReadDir(c.Directory)
+	files, _ := ioutil.ReadDir(viper.GetString("cache.directory"))
 	for _, file := range files {
 		totalSize += file.Size()
 	}
@@ -76,7 +70,7 @@ func (c *AudioCache) GetCurrentStatistics() (int, int64) {
 // are cleared until it is no longer exceeding the limit.
 func (c *AudioCache) CheckDirectorySize() {
 	c.UpdateStats()
-	for c.TotalFileSize > (c.MaximumSize * BytesInMebibyte) {
+	for c.TotalFileSize > (viper.GetInt("cache.maximumsize") * BytesInMebibyte) {
 		if err := c.RemoveOldest(); err != nil {
 			break
 		}
@@ -91,16 +85,16 @@ func (c *AudioCache) UpdateStats() {
 
 // CleanPeriodically loops forever, cleaning expired cached audio files as necessary.
 func (c *AudioCache) CleanPeriodically() {
-	for range time.Tick(time.Duration(c.CheckInterval) * time.Minute) {
-		files, _ := ioutil.ReadDir(c.Directory)
+	for range time.Tick(time.Duration(viper.GetInt("cache.checkinterval")) * time.Minute) {
+		files, _ := ioutil.ReadDir(viper.GetString("cache.directory"))
 		for _, file := range files {
 			// It is safe to check the modification time because when audio
 			// files are played their modification time is updated. This ensures
 			// that audio files will not get deleted while they are playing, assuming
 			// a reasonable expiry time is set in the configuration.
 			hours := time.Since(file.ModTime()).Hours()
-			if hours >= c.ExpireTime {
-				os.Remove(fmt.Sprintf("%s/%s", c.Directory, file.Name()))
+			if hours >= viper.GetInt("cache.expiretime") {
+				os.Remove(fmt.Sprintf("%s/%s", viper.GetString("cache.directory"), file.Name()))
 			}
 		}
 	}
@@ -108,10 +102,10 @@ func (c *AudioCache) CleanPeriodically() {
 
 // RemoveOldest deletes the oldest file in the cache.
 func (c *AudioCache) RemoveOldest() error {
-	files, _ := ioutil.ReadDir(c.Directory)
+	files, _ := ioutil.ReadDir(viper.GetString("cache.directory"))
 	if len(files) > 0 {
 		sort.Sort(SortFilesByAge(files))
-		os.Remove(fmt.Sprintf("%s/%s", c.Directory, files[0].Name()))
+		os.Remove(fmt.Sprintf("%s/%s", viper.GetString("cache.directory"), files[0].Name()))
 		return nil
 	}
 	return errors.New("There are no files currently cached.")
@@ -125,14 +119,4 @@ func (c *AudioCache) NumCachedFiles() int {
 // TotalCacheSize returns the total file size of the cache in bytes.
 func (c *AudioCache) TotalCacheSize() int64 {
 	return c.TotalFileSize
-}
-
-// MaximumCacheSize returns the maximum file size of the cache in bytes.
-func (c *AudioCache) MaximumCacheSize() int64 {
-	return c.MaximumSize
-}
-
-// CacheDirectory returns the directory in which audio files are cached.
-func (c *AudioCache) CacheDirectory() string {
-	return c.Directory
 }

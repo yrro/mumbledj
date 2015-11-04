@@ -10,31 +10,21 @@ package commands
 import (
 	"github.com/layeh/gumble/gumble"
 	"github.com/matthieugrieger/mumbledj/objects"
+	"github.com/spf13/viper"
 )
 
 // SkipCommand is a command that places a vote to skip the current audio track.
-type SkipCommand struct {
-	CurrentAliases []string
-	IsAdminCommand bool
-}
-
-// NewSkipCommand returns a new SkipCommand object.
-func NewSkipCommand(aliases []string, isAdmin bool) *SkipCommand {
-	return &SkipCommand{
-		CurrentAliases: aliases,
-		IsAdminCommand: isAdmin,
-	}
-}
+type SkipCommand struct{}
 
 // Aliases is a method that returns the current aliases for the add command.
 func (c *SkipCommand) Aliases() []string {
-	return c.CurrentAliases
+	return viper.GetStringSlice("aliases.skip")
 }
 
 // IsAdmin is a command that returns a bool that determines if a command is an
 // admin command or not.
 func (c *SkipCommand) IsAdmin() bool {
-	return c.IsAdminCommand
+	return viper.GetBool("permissions.skip")
 }
 
 // Execute executes the command with the given bot state, user, and arguments.
