@@ -1,50 +1,44 @@
 /*
  * MumbleDJ
  * By Matthieu Grieger
- * mumbledj/mumbledj.go
+ * dj/mumbledj.go
  * Copyright (c) 2014, 2015 Matthieu Grieger (MIT License)
  */
 
-package mumbledj
+package dj
 
 import (
-	"log"
+	"strings"
 	"time"
 
 	"github.com/layeh/gumble/gumble"
 	"github.com/layeh/gumble/gumble_ffmpeg"
 	"github.com/layeh/gumble/gumbleutil"
-	"github.com/matthieugrieger/mumbledj/objects"
+	"github.com/matthieugrieger/mumbledj/state"
 	"github.com/spf13/viper"
 )
 
 // MumbleDJ is a struct that keeps track of all aspects of the bot's state.
 type MumbleDJ struct {
 	GumbleConfig gumble.Config
-	Config       *objects.Config
-	Client       *gumble.Client
 	KeepAlive    chan bool
-	Queue        *AudioQueue
-	AudioStream  *gumble_ffmpeg.Stream
-	Skips        map[SkipType][]string
-	Cache        *AudioCache
-	Log          log.Logger
 	Commander    *Commander
+	State        *state.BotState
 }
 
 // OnConnect event. First moves MumbleDJ into default channel if one exists. The
 // configuration is loaded and the audio stream is set up.
 func (dj *MumbleDJ) OnConnect(e *gumble.ConnectEvent) {
-	dj.Client.Self.Move(dj.Client.Channels.Find(viper.GetStringSlice("general.defaultchannel")...))
+	dj.State.Client.Self.Move(dj.State.Client.Channels.Find(viper.GetStringSlice("general.defaultchannel")...))
 
-	dj.AudioStream = gumble_ffmpeg.New(dj.Client)
-	dj.AudioStream.Volume = float32(viper.GetFloat64("volume.default"))
+	dj.State.AudioStream = gumble_ffmpeg.New(dj.State.Client)
+	dj.State.AudioStream.Volume = float32(viper.GetFloat64("volume.default"))
 
-	dj.Client.Self.SetComment(viper.GetString("general.defaultcomment"))
+	dj.State.Client.Self.SetComment(viper.GetString("general.defaultcomment"))
 
 	if viper.GetBool("cache.enabled") {
-		dj.Cache.UpdateStats()
-		go dj.Cache.CleanPeriodically()
+		dj.State.Cache.UpdateStats()
+		go dj.State.Cache.CleanPeriodically()
 	}
 }
 
@@ -52,15 +46,15 @@ func (dj *MumbleDJ) OnConnect(e *gumble.ConnectEvent) {
 // automatic connection retries are enabled.
 func (dj *MumbleDJ) OnDisconnect(e *gumble.DisconnectEvent) {
 	if viper.GetBool("connection.retryenabled") && (e.Type == gumble.DisconnectError || e.Type == gumble.DisconnectKicked) {
-		dj.Log.Printf("Disconnected from server. Retrying connection every %d seconds %d times.\n",
+		dj.State.Log.Printf("Disconnected from server. Retrying connection every %d seconds %d times.\n",
 			viper.GetInt("connection.retryinterval"),
 			viper.GetInt("connection.retryattempts"))
 
 		success := false
 		for retries := 0; retries < viper.GetInt("connection.retryattempts"); retries++ {
-			dj.Log.Println("Retrying connection...")
-			if err := dj.Client.Connect(); err == nil {
-				dj.Log.Println("Successfully reconnected to the server!")
+			dj.State.Log.Println("Retrying connection...")
+			if err := dj.State.Client.Connect(); err == nil {
+				dj.State.Log.Println("Successfully reconnected to the server!")
 				success = true
 				break
 			}
@@ -68,11 +62,11 @@ func (dj *MumbleDJ) OnDisconnect(e *gumble.DisconnectEvent) {
 		}
 		if !success {
 			dj.KeepAlive <- true
-			dj.Log.Fatalln("Could not reconnect to server. Exiting...")
+			dj.State.Log.Fatalln("Could not reconnect to server. Exiting...")
 		}
 	} else {
 		dj.KeepAlive <- true
-		dj.Log.Fatalln("Disconnected from server. No connection retries will be attempted.")
+		dj.State.Log.Fatalln("Disconnected from server. No connection retries will be attempted.")
 	}
 }
 
@@ -82,7 +76,10 @@ func (dj *MumbleDJ) OnTextMessage(e *gumble.TextMessageEvent) {
 	plainMessage := gumbleutil.PlainText(&e.TextMessage)
 	if len(plainMessage) != 0 {
 		if plainMessage[0] == viper.GetString("general.commandprefix")[0] && plainMessage != viper.GetString("general.commandprefix") {
-			//dj.Command.Execute(e.Sender, plainMessage[1:])
+			command, err := dj.Commander.FindCommand(plainMessage[1:])
+			if err == nil {
+				command.Execute(dj.State, e.Sender, strings.Split(plainMessage, " ")[1:]...)
+			}
 		}
 	}
 }
@@ -91,39 +88,39 @@ func (dj *MumbleDJ) OnTextMessage(e *gumble.TextMessageEvent) {
 // current status of the users on the server.
 func (dj *MumbleDJ) OnUserChange(e *gumble.UserChangeEvent) {
 	if e.Type.Has(gumble.UserChangeDisconnected) || e.Type.Has(gumble.UserChangeChannel) {
-		dj.RemoveSkip(e.User, CurrentTrackSkipType)
-		dj.RemoveSkip(e.User, CurrentPlaylistSkipType)
+		dj.RemoveSkip(e.User, 0)
+		dj.RemoveSkip(e.User, 1)
 	}
 }
 
 // AddSkip adds the username of a user that has skipped the current track/playlist to the
 // desired skiplist.
-func (dj *MumbleDJ) AddSkip(user *gumble.User, skipType SkipType) {
-	for _, username := range dj.Skips[skipType] {
+func (dj *MumbleDJ) AddSkip(user *gumble.User, skipType int) {
+	for _, username := range dj.State.Skips[skipType] {
 		if username == user.Name {
-			dj.Log.Printf("%s has already skipped this item.\n", user.Name)
+			dj.State.Log.Printf("%s has already skipped this item.\n", user.Name)
 		}
 	}
-	dj.Skips[skipType] = append(dj.Skips[skipType], user.Name)
-	dj.Log.Printf("%s's skip has been successfully added for this item.\n", user.Name)
+	dj.State.Skips[skipType] = append(dj.State.Skips[skipType], user.Name)
+	dj.State.Log.Printf("%s's skip has been successfully added for this item.\n", user.Name)
 }
 
 // RemoveSkip removes the username of a user who has previously skipped the current track/playlist
 // from the desired skiplist.
-func (dj *MumbleDJ) RemoveSkip(user *gumble.User, skipType SkipType) {
-	for i, username := range dj.Skips[skipType] {
+func (dj *MumbleDJ) RemoveSkip(user *gumble.User, skipType int) {
+	for i, username := range dj.State.Skips[skipType] {
 		if username == user.Name {
-			dj.Skips[skipType] = append(dj.Skips[skipType][:i], dj.Skips[skipType][i+1:]...)
-			dj.Log.Printf("%s's skip has been successfully removed from this item.\n", user.Name)
+			dj.State.Skips[skipType] = append(dj.State.Skips[skipType][:i], dj.State.Skips[skipType][i+1:]...)
+			dj.State.Log.Printf("%s's skip has been successfully removed from this item.\n", user.Name)
 			return
 		}
 	}
-	dj.Log.Printf("%s never skipped this item.\n", user.Name)
+	dj.State.Log.Printf("%s never skipped this item.\n", user.Name)
 }
 
 // ResetSkips resets the skiplist for either the current track or the current playlist.
-func (dj *MumbleDJ) ResetSkips(skipType SkipType) {
-	dj.Skips[skipType] = dj.Skips[skipType][:0]
+func (dj *MumbleDJ) ResetSkips(skipType int) {
+	dj.State.Skips[skipType] = dj.State.Skips[skipType][:0]
 }
 
 // HasPermission checks if a particular user has the necessary permissions to execute a command.
@@ -143,7 +140,7 @@ func (dj *MumbleDJ) HasPermission(user *gumble.User, isAdminCommand bool) bool {
 // SendPrivateMessage sends a private message to a user. This method verifies that the targeted
 // user is still present in the server before attempting to send the message.
 func (dj *MumbleDJ) SendPrivateMessage(user *gumble.User, message string) {
-	if targetUser := dj.Client.Self.Channel.Users.Find(user.Name); targetUser != nil {
+	if targetUser := dj.State.Client.Self.Channel.Users.Find(user.Name); targetUser != nil {
 		targetUser.Send(message)
 	}
 }

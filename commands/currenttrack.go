@@ -9,7 +9,7 @@ package commands
 
 import (
 	"github.com/layeh/gumble/gumble"
-	"github.com/matthieugrieger/mumbledj/objects"
+	"github.com/matthieugrieger/mumbledj/state"
 	"github.com/spf13/viper"
 )
 
@@ -28,6 +28,6 @@ func (c *CurrentTrackCommand) IsAdmin() bool {
 }
 
 // Execute executes the command with the given bot state, user, and arguments.
-func (c *CurrentTrackCommand) Execute(state *objects.BotState, user *gumble.User, args ...string) (*objects.BotState, string, error) {
-
+func (c *CurrentTrackCommand) Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, error) {
+	return nil, "", nil
 }

@@ -1,11 +1,11 @@
 /*
  * MumbleDJ
  * By Matthieu Grieger
- * interfaces/track.go
+ * audio/track.go
  * Copyright (c) 2014, 2015 Matthieu Grieger (MIT License)
  */
 
-package interfaces
+package audio
 
 import "time"
 

@@ -7,7 +7,9 @@
 
 package main
 
+import "github.com/matthieugrieger/mumbledj/dj"
+
 func main() {
-	var dj MumbleDJ
+	var dj dj.MumbleDJ
 	dj.Start()
 }

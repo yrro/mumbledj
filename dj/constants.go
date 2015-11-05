@@ -1,11 +1,11 @@
 /*
  * MumbleDJ
  * By Matthieu Grieger
- * mumbledj/constants.go
+ * dj/constants.go
  * Copyright (c) 2014, 2015 Matthieu Grieger (MIT License)
  */
 
-package mumbledj
+package dj
 
 // SkipType represents either a current track skip or a current playlist skip.
 type SkipType int

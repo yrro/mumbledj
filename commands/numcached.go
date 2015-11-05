@@ -9,7 +9,7 @@ package commands
 
 import (
 	"github.com/layeh/gumble/gumble"
-	"github.com/matthieugrieger/mumbledj/objects"
+	"github.com/matthieugrieger/mumbledj/state"
 	"github.com/spf13/viper"
 )
 
@@ -29,6 +29,6 @@ func (c *NumCachedCommand) IsAdmin() bool {
 }
 
 // Execute executes the command with the given bot state, user, and arguments.
-func (c *NumCachedCommand) Execute(state *objects.BotState, user *gumble.User, args ...string) (*objects.BotState, string, error) {
-
+func (c *NumCachedCommand) Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, error) {
+	return nil, "", nil
 }

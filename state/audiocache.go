@@ -1,11 +1,11 @@
 /*
  * MumbleDJ
  * By Matthieu Grieger
- * mumbledj/audiocache.go
+ * state/audiocache.go
  * Copyright (c) 2014, 2015 Matthieu Grieger (MIT License)
  */
 
-package mumbledj
+package state
 
 import (
 	"errors"
@@ -70,7 +70,7 @@ func (c *AudioCache) GetCurrentStatistics() (int, int64) {
 // are cleared until it is no longer exceeding the limit.
 func (c *AudioCache) CheckDirectorySize() {
 	c.UpdateStats()
-	for c.TotalFileSize > (viper.GetInt("cache.maximumsize") * BytesInMebibyte) {
+	for c.TotalFileSize > int64(viper.GetInt("cache.maximumsize")*1048576) {
 		if err := c.RemoveOldest(); err != nil {
 			break
 		}
@@ -93,7 +93,7 @@ func (c *AudioCache) CleanPeriodically() {
 			// that audio files will not get deleted while they are playing, assuming
 			// a reasonable expiry time is set in the configuration.
 			hours := time.Since(file.ModTime()).Hours()
-			if hours >= viper.GetInt("cache.expiretime") {
+			if hours >= viper.GetFloat64("cache.expiretime") {
 				os.Remove(fmt.Sprintf("%s/%s", viper.GetString("cache.directory"), file.Name()))
 			}
 		}

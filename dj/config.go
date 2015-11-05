@@ -1,11 +1,11 @@
 /*
  * MumbleDJ
  * By Matthieu Grieger
- * mumbledj/config.go
+ * dj/config.go
  * Copyright (c) 2014, 2015 Matthieu Grieger (MIT License)
  */
 
-package mumbledj
+package dj
 
 import "github.com/spf13/viper"
 

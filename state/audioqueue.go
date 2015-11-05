@@ -1,25 +1,25 @@
 /*
  * MumbleDJ
  * By Matthieu Grieger
- * mumbledj/audioqueue.go
+ * state/audioqueue.go
  * Copyright (c) 2014, 2015 Matthieu Grieger (MIT License)
  */
 
-package mumbledj
+package state
 
 import (
 	"errors"
 	"math/rand"
 	"time"
 
-	"github.com/matthieugrieger/mumbledj/interfaces"
+	"github.com/matthieugrieger/mumbledj/audio"
 	"github.com/spf13/viper"
 )
 
 // AudioQueue holds the audio queue itself along with useful methods for
 // performing actions on the queue.
 type AudioQueue struct {
-	Queue []interfaces.Track
+	Queue []audio.Track
 }
 
 func init() {
@@ -29,12 +29,12 @@ func init() {
 // NewAudioQueue initializes a new queue and returns it.
 func NewAudioQueue() *AudioQueue {
 	return &AudioQueue{
-		Queue: make([]interfaces.Track, 0),
+		Queue: make([]audio.Track, 0),
 	}
 }
 
 // AddTrack adds a Track to the AudioQueue.
-func (q *AudioQueue) AddTrack(t interfaces.Track) error {
+func (q *AudioQueue) AddTrack(t audio.Track) error {
 	beforeLen := len(q.Queue)
 	q.Queue = append(q.Queue, t)
 	if len(q.Queue) == beforeLen+1 {
@@ -44,7 +44,7 @@ func (q *AudioQueue) AddTrack(t interfaces.Track) error {
 }
 
 // CurrentTrack returns the current Track.
-func (q *AudioQueue) CurrentTrack() (interfaces.Track, error) {
+func (q *AudioQueue) CurrentTrack() (audio.Track, error) {
 	if len(q.Queue) != 0 {
 		return q.Queue[0], nil
 	}
@@ -52,7 +52,7 @@ func (q *AudioQueue) CurrentTrack() (interfaces.Track, error) {
 }
 
 // PeekNextTrack peeks at the next Track and returns it.
-func (q *AudioQueue) PeekNextTrack() (interfaces.Track, error) {
+func (q *AudioQueue) PeekNextTrack() (audio.Track, error) {
 	if len(q.Queue) > 1 {
 		if viper.GetBool("general.automaticshuffleon") {
 			q.RandomNextTrack(false)
@@ -64,7 +64,7 @@ func (q *AudioQueue) PeekNextTrack() (interfaces.Track, error) {
 
 // Traverse is a traversal function for AudioQueue. Allows a visit function to
 // be passed in which performs the specified action on each queue item.
-func (q *AudioQueue) Traverse(visit func(i int, t interfaces.Track)) {
+func (q *AudioQueue) Traverse(visit func(i int, t audio.Track)) {
 	for tQueue, queueTrack := range q.Queue {
 		visit(tQueue, queueTrack)
 	}
@@ -91,6 +91,6 @@ func (q *AudioQueue) RandomNextTrack(queueWasEmpty bool) {
 }
 
 // TrackQueue returns the audio queue.
-func (q *AudioQueue) TrackQueue() []interfaces.Track {
+func (q *AudioQueue) TrackQueue() []audio.Track {
 	return q.Queue
 }

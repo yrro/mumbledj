@@ -9,12 +9,12 @@ package interfaces
 
 import (
 	"github.com/layeh/gumble/gumble"
-	"github.com/matthieugrieger/mumbledj/objects"
+	"github.com/matthieugrieger/mumbledj/state"
 )
 
 // Command is an interface that all commands must implement.
 type Command interface {
 	Aliases() []string
 	IsAdmin() bool
-	Execute(state *objects.BotState, user *gumble.User, args ...string) (*objects.BotState, string, error)
+	Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, error)
 }
