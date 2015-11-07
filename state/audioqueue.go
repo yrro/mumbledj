@@ -89,8 +89,3 @@ func (q *AudioQueue) RandomNextTrack(queueWasEmpty bool) {
 		q.Queue[nextTrackIndex], q.Queue[swapIndex] = q.Queue[swapIndex], q.Queue[nextTrackIndex]
 	}
 }
-
-// TrackQueue returns the audio queue.
-func (q *AudioQueue) TrackQueue() []audio.Track {
-	return q.Queue
-}

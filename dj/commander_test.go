@@ -10,10 +10,39 @@ package dj
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/spf13/viper"
+	"github.com/stretchr/testify/suite"
 )
 
-func TestNewCommander(t *testing.T) {
-	commander := NewCommander()
-	assert.True(t, len(commander.Commands) > 0, "The command list should be populated.")
+type CommanderTestSuite struct {
+	Commander *Commander
+	suite.Suite
+}
+
+func (suite *CommanderTestSuite) SetupTest() {
+	viper.Set("aliases.add", []string{"add", "a"})
+	viper.Set("aliases.cachesize", []string{"cachesize", "cs"})
+	suite.Commander = NewCommander()
+}
+
+func (suite *CommanderTestSuite) TestNewCommander() {
+	suite.True(len(suite.Commander.Commands) > 0, "The command list should be populated.")
+}
+
+func (suite *CommanderTestSuite) TestFindCommand() {
+	result, err := suite.Commander.FindCommand("Add this should find the add command!")
+	suite.Equal(viper.GetStringSlice("aliases.add"), result.Aliases(), "The add command should be returned.")
+	suite.Nil(err, "There shouldn't be an error.")
+
+	result, err = suite.Commander.FindCommand("cachesize this should find the cache size command!")
+	suite.Equal(viper.GetStringSlice("aliases.cachesize"), result.Aliases(), "The cachesize command should be returned.")
+	suite.Nil(err, "There shouldn't be an error.")
+
+	result, err = suite.Commander.FindCommand("This shouldn't find a command.")
+	suite.Nil(result, "Result should be nil.")
+	suite.NotNil(err, "There should be an error.")
+}
+
+func TestCommanderTestSuite(t *testing.T) {
+	suite.Run(t, new(CommanderTestSuite))
 }
