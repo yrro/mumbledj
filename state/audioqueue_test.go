@@ -100,8 +100,11 @@ func (suite *AudioQueueTestSuite) TestShuffleTracks() {
 	suite.Equal(suite.SecondTrack, suite.Queue.Queue[1], "Shuffle shouldn't do anything when only two tracks are in the queue.")
 
 	suite.Queue.AddTrack(suite.ThirdTrack)
+	suite.Queue.AddTrack(MockedAudioTrack{Identifier: "fourth"})
+	suite.Queue.AddTrack(MockedAudioTrack{Identifier: "fifth"})
 
-	queueBefore := suite.Queue.Queue
+	queueBefore := make([]audio.Track, len(suite.Queue.Queue))
+	copy(queueBefore, suite.Queue.Queue)
 	suite.Queue.ShuffleTracks()
 	suite.NotEqual(queueBefore, suite.Queue.Queue, "The shuffled queue should not be the same as the original queue.")
 }
