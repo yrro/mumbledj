@@ -93,39 +93,9 @@ func (dj *MumbleDJ) OnTextMessage(e *gumble.TextMessageEvent) {
 // current status of the users on the server.
 func (dj *MumbleDJ) OnUserChange(e *gumble.UserChangeEvent) {
 	if e.Type.Has(gumble.UserChangeDisconnected) || e.Type.Has(gumble.UserChangeChannel) {
-		dj.RemoveSkip(e.User, 0)
-		dj.RemoveSkip(e.User, 1)
+		dj.State.Skips.RemoveTrackSkip(e.User)
+		dj.State.Skips.RemovePlaylistSkip(e.User)
 	}
-}
-
-// AddSkip adds the username of a user that has skipped the current track/playlist to the
-// desired skiplist.
-func (dj *MumbleDJ) AddSkip(user *gumble.User, skipType int) {
-	for _, username := range dj.State.Skips[skipType] {
-		if username == user.Name {
-			dj.State.Log.Printf("%s has already skipped this item.\n", user.Name)
-		}
-	}
-	dj.State.Skips[skipType] = append(dj.State.Skips[skipType], user.Name)
-	dj.State.Log.Printf("%s's skip has been successfully added for this item.\n", user.Name)
-}
-
-// RemoveSkip removes the username of a user who has previously skipped the current track/playlist
-// from the desired skiplist.
-func (dj *MumbleDJ) RemoveSkip(user *gumble.User, skipType int) {
-	for i, username := range dj.State.Skips[skipType] {
-		if username == user.Name {
-			dj.State.Skips[skipType] = append(dj.State.Skips[skipType][:i], dj.State.Skips[skipType][i+1:]...)
-			dj.State.Log.Printf("%s's skip has been successfully removed from this item.\n", user.Name)
-			return
-		}
-	}
-	dj.State.Log.Printf("%s never skipped this item.\n", user.Name)
-}
-
-// ResetSkips resets the skiplist for either the current track or the current playlist.
-func (dj *MumbleDJ) ResetSkips(skipType int) {
-	dj.State.Skips[skipType] = dj.State.Skips[skipType][:0]
 }
 
 // SendPrivateMessage sends a private message to a user. This method verifies that the targeted

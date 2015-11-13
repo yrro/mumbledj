@@ -21,6 +21,6 @@ type BotState struct {
 	AudioStream *gumble_ffmpeg.Stream
 	Queue       *AudioQueue
 	Cache       *AudioCache
-	Skips       map[int][]string
+	Skips       *SkipTracker
 	Log         log.Logger
 }
