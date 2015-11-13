@@ -11,8 +11,11 @@ import (
 	"errors"
 	"strings"
 
+	"github.com/layeh/gumble/gumble"
 	"github.com/matthieugrieger/mumbledj/commands"
 	"github.com/matthieugrieger/mumbledj/interfaces"
+	"github.com/matthieugrieger/mumbledj/state"
+	"github.com/spf13/viper"
 )
 
 // Commander is a struct that holds all available commands and provides
@@ -46,16 +49,35 @@ func NewCommander() *Commander {
 	}
 }
 
-// FindCommand attempts to find a reference to a command in an incoming message.
+// FindAndExecuteCommand attempts to find a reference to a command in an incoming message.
 // If a command is found the command object is returned.
-func (c *Commander) FindCommand(message string) (interfaces.Command, error) {
+func (c *Commander) FindAndExecuteCommand(currentState *state.BotState, user *gumble.User, message string) (*state.BotState, string, error) {
 	possibleCommand := strings.ToLower(message[0:strings.Index(message, " ")])
 	for _, command := range c.Commands {
 		for _, alias := range command.Aliases() {
 			if possibleCommand == alias {
-				return command, nil
+				return c.executeCommand(currentState, user, message, command)
 			}
 		}
 	}
-	return nil, errors.New("No matching command found.")
+	return nil, "", errors.New("No matching command found.")
+}
+
+func (c *Commander) executeCommand(currentState *state.BotState, user *gumble.User, message string, command interfaces.Command) (*state.BotState, string, error) {
+	var canExecute bool
+	if viper.GetBool("permissions.adminsenabled") && command.IsAdmin() {
+		for _, username := range viper.GetStringSlice("permissions.admins") {
+			if user.Name == username {
+				canExecute = true
+			}
+		}
+		canExecute = false
+	} else {
+		canExecute = true
+	}
+
+	if canExecute {
+		return command.Execute(currentState, user, strings.Split(message, " ")[1:]...)
+	}
+	return nil, "", errors.New("You do not have permission to execute this command.")
 }

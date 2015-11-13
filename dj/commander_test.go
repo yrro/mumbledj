@@ -29,7 +29,8 @@ func (suite *CommanderTestSuite) TestNewCommander() {
 	suite.True(len(suite.Commander.Commands) > 0, "The command list should be populated.")
 }
 
-func (suite *CommanderTestSuite) TestFindCommand() {
+// TODO: This test is currently broken. Update it to work with the new way commands are handled.
+func (suite *CommanderTestSuite) TestFindAndExecuteCommand() {
 	result, err := suite.Commander.FindCommand("Add this should find the add command!")
 	suite.Equal(viper.GetStringSlice("aliases.add"), result.Aliases(), "The add command should be returned.")
 	suite.Nil(err, "There shouldn't be an error.")

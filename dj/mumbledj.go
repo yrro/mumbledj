@@ -8,7 +8,7 @@
 package dj
 
 import (
-	"strings"
+	"fmt"
 	"time"
 
 	"github.com/layeh/gumble/gumble"
@@ -76,9 +76,14 @@ func (dj *MumbleDJ) OnTextMessage(e *gumble.TextMessageEvent) {
 	plainMessage := gumbleutil.PlainText(&e.TextMessage)
 	if len(plainMessage) != 0 {
 		if plainMessage[0] == viper.GetString("general.commandprefix")[0] && plainMessage != viper.GetString("general.commandprefix") {
-			command, err := dj.Commander.FindCommand(plainMessage[1:])
-			if err == nil {
-				command.Execute(dj.State, e.Sender, strings.Split(plainMessage, " ")[1:]...)
+			state, message, err := dj.Commander.FindAndExecuteCommand(dj.State, e.Sender, plainMessage[1:])
+			if state != nil {
+				dj.State = state
+			}
+			if err != nil {
+				dj.SendPrivateMessage(e.Sender, fmt.Sprintf("An error occurred while executing your command: %s", err.Error()))
+			} else {
+				dj.State.Client.Self.Channel.Send(message, false)
 			}
 		}
 	}
@@ -121,20 +126,6 @@ func (dj *MumbleDJ) RemoveSkip(user *gumble.User, skipType int) {
 // ResetSkips resets the skiplist for either the current track or the current playlist.
 func (dj *MumbleDJ) ResetSkips(skipType int) {
 	dj.State.Skips[skipType] = dj.State.Skips[skipType][:0]
-}
-
-// HasPermission checks if a particular user has the necessary permissions to execute a command.
-// Permissions are specified in the user configuration if it exists.
-func (dj *MumbleDJ) HasPermission(user *gumble.User, isAdminCommand bool) bool {
-	if viper.GetBool("permissions.adminsenabled") && isAdminCommand {
-		for _, username := range viper.GetStringSlice("permissions.admins") {
-			if username == user.Name {
-				return true
-			}
-		}
-		return false
-	}
-	return true
 }
 
 // SendPrivateMessage sends a private message to a user. This method verifies that the targeted
