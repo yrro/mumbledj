@@ -16,7 +16,7 @@ import (
 // ReloadCommand is a command that reloads the configuration values for the bot.
 type ReloadCommand struct{}
 
-// Aliases is a method that returns the current aliases for the add command.
+// Aliases is a method that returns the current aliases for the command.
 func (c *ReloadCommand) Aliases() []string {
 	return viper.GetStringSlice("aliases.reload")
 }

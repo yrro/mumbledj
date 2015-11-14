@@ -16,7 +16,7 @@ import (
 // CurrentTrackCommand is a command that outputs the track being currently played (if exists).
 type CurrentTrackCommand struct{}
 
-// Aliases is a method that returns the current aliases for the add command.
+// Aliases is a method that returns the current aliases for the command.
 func (c *CurrentTrackCommand) Aliases() []string {
 	return viper.GetStringSlice("aliases.currenttrack")
 }

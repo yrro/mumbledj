@@ -16,7 +16,7 @@ import (
 // ShuffleCommand is a command that shuffles the audio queue.
 type ShuffleCommand struct{}
 
-// Aliases is a method that returns the current aliases for the add command.
+// Aliases is a method that returns the current aliases for the command.
 func (c *ShuffleCommand) Aliases() []string {
 	return viper.GetStringSlice("aliases.shuffle")
 }

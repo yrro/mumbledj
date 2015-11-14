@@ -17,7 +17,7 @@ import (
 // are currently cached on disk.
 type NumCachedCommand struct{}
 
-// Aliases is a method that returns the current aliases for the add command.
+// Aliases is a method that returns the current aliases for the command.
 func (c *NumCachedCommand) Aliases() []string {
 	return viper.GetStringSlice("aliases.numcached")
 }

@@ -17,7 +17,7 @@ import (
 // the audio queue.
 type NumTracksCommand struct{}
 
-// Aliases is a method that returns the current aliases for the add command.
+// Aliases is a method that returns the current aliases for the command.
 func (c *NumTracksCommand) Aliases() []string {
 	return viper.GetStringSlice("aliases.numtracks")
 }

@@ -16,7 +16,7 @@ import (
 // VolumeCommand is a command that changes the volume of the audio output.
 type VolumeCommand struct{}
 
-// Aliases is a method that returns the current aliases for the add command.
+// Aliases is a method that returns the current aliases for the command.
 func (c *VolumeCommand) Aliases() []string {
 	return viper.GetStringSlice("aliases.volume")
 }

@@ -16,7 +16,7 @@ import (
 // KillCommand is a command that safely kills the bot.
 type KillCommand struct{}
 
-// Aliases is a method that returns the current aliases for the add command.
+// Aliases is a method that returns the current aliases for the command.
 func (c *KillCommand) Aliases() []string {
 	return viper.GetStringSlice("aliases.kill")
 }

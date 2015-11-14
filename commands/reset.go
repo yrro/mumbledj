@@ -16,7 +16,7 @@ import (
 // ResetCommand is a command that resets the audio queue.
 type ResetCommand struct{}
 
-// Aliases is a method that returns the current aliases for the add command.
+// Aliases is a method that returns the current aliases for the command.
 func (c *ResetCommand) Aliases() []string {
 	return viper.GetStringSlice("aliases.reset")
 }

@@ -16,7 +16,7 @@ import (
 // CacheSizeCommand is a command that outputs the current size of the cache.
 type CacheSizeCommand struct{}
 
-// Aliases is a method that returns the current aliases for the cachesize command.
+// Aliases is a method that returns the current aliases for the command.
 func (c *CacheSizeCommand) Aliases() []string {
 	return viper.GetStringSlice("aliases.cachesize")
 }

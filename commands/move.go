@@ -16,7 +16,7 @@ import (
 // MoveCommand is a command that moves the bot from one channel to another.
 type MoveCommand struct{}
 
-// Aliases is a method that returns the current aliases for the add command.
+// Aliases is a method that returns the current aliases for the command.
 func (c *MoveCommand) Aliases() []string {
 	return viper.GetStringSlice("aliases.move")
 }
