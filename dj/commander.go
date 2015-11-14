@@ -30,6 +30,8 @@ func NewCommander() *Commander {
 		new(commands.AddCommand),
 		new(commands.CacheSizeCommand),
 		new(commands.CurrentTrackCommand),
+		new(commands.ForceSkipCommand),
+		new(commands.ForceSkipPlaylistCommand),
 		new(commands.HelpCommand),
 		new(commands.KillCommand),
 		new(commands.MoveCommand),
@@ -40,7 +42,10 @@ func NewCommander() *Commander {
 		new(commands.ResetCommand),
 		new(commands.SetCommentCommand),
 		new(commands.ShuffleCommand),
+		new(commands.ShuffleOffCommand),
+		new(commands.ShuffleOnCommand),
 		new(commands.SkipCommand),
+		new(commands.SkipPlaylistCommand),
 		new(commands.VolumeCommand),
 	}
 
