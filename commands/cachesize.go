@@ -8,6 +8,9 @@
 package commands
 
 import (
+	"errors"
+	"fmt"
+
 	"github.com/layeh/gumble/gumble"
 	"github.com/matthieugrieger/mumbledj/state"
 	"github.com/spf13/viper"
@@ -29,5 +32,10 @@ func (c *CacheSizeCommand) IsAdmin() bool {
 
 // Execute executes the command with the given bot state, user, and arguments.
 func (c *CacheSizeCommand) Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, error) {
-	return nil, "", nil
+	if !viper.GetBool("cache.enabled") {
+		return nil, "", errors.New("Caching is currently disabled.")
+	}
+
+	state.Cache.UpdateStats()
+	return nil, fmt.Sprintf("The current size of the cache is %.2f MiB.", state.Cache.TotalFileSize/1048576), nil
 }
