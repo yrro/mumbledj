@@ -8,6 +8,10 @@
 package commands
 
 import (
+	"errors"
+	"fmt"
+	"strconv"
+
 	"github.com/layeh/gumble/gumble"
 	"github.com/matthieugrieger/mumbledj/state"
 	"github.com/spf13/viper"
@@ -29,5 +33,24 @@ func (c *VolumeCommand) IsAdmin() bool {
 
 // Execute executes the command with the given bot state, user, and arguments.
 func (c *VolumeCommand) Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, error) {
-	return nil, "", nil
+	if len(args) == 0 {
+		// Send the user the current volume level.
+		return nil, fmt.Sprintf("The current volume is <b>%.2f</b>.", state.AudioStream.Volume), nil
+	}
+	if len(args) > 1 {
+		return nil, "", errors.New("The volume command only accepts 0-1 arguments.")
+	}
+
+	newVolume, err := strconv.ParseFloat(args[0], 64)
+	if err != nil {
+		return nil, "", errors.New("An error occurred while parsing the requested volume.")
+	}
+
+	if newVolume < viper.GetFloat64("volume.lowest") || newVolume > viper.GetFloat64("volume.highest") {
+		return nil, "", fmt.Errorf("Volumes must be between the values <b>%.2f</b> and <b>%.2f</b>",
+			viper.GetFloat64("volume.lowest"), viper.GetFloat64("volume.highest"))
+	}
+
+	state.AudioStream.Volume = float32(newVolume)
+	return state, fmt.Sprintf("<b>%s</b> has changed the volume to <b>%.2f</b>.", user.Name, newVolume), nil
 }
