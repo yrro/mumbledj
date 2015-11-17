@@ -57,18 +57,30 @@ func NewCommander() *Commander {
 // FindAndExecuteCommand attempts to find a reference to a command in an incoming message.
 // If a command is found the command object is returned.
 func (c *Commander) FindAndExecuteCommand(currentState *state.BotState, user *gumble.User, message string) (*state.BotState, string, error) {
+	command, err := c.FindCommand(message)
+	if err != nil {
+		return nil, "", errors.New("No command was found in this message.")
+	}
+
+	return c.ExecuteCommand(currentState, user, message, command)
+}
+
+// FindCommand returns the command that corresponds with the incoming message.
+func (c *Commander) FindCommand(message string) (interfaces.Command, error) {
 	possibleCommand := strings.ToLower(message[0:strings.Index(message, " ")])
 	for _, command := range c.Commands {
 		for _, alias := range command.Aliases() {
 			if possibleCommand == alias {
-				return c.executeCommand(currentState, user, message, command)
+				return command, nil
 			}
 		}
 	}
-	return nil, "", errors.New("No matching command found.")
+	return nil, errors.New("No command was found in this message.")
 }
 
-func (c *Commander) executeCommand(currentState *state.BotState, user *gumble.User, message string, command interfaces.Command) (*state.BotState, string, error) {
+// ExecuteCommand executes the passed command with the corresponding state, user, and message. The message is split by whitespace to make up the arguments
+// of a command.
+func (c *Commander) ExecuteCommand(currentState *state.BotState, user *gumble.User, message string, command interfaces.Command) (*state.BotState, string, error) {
 	var canExecute bool
 	if viper.GetBool("permissions.adminsenabled") && command.IsAdmin() {
 		for _, username := range viper.GetStringSlice("permissions.admins") {
