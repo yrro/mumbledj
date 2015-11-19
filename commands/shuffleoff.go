@@ -8,6 +8,8 @@
 package commands
 
 import (
+	"errors"
+
 	"github.com/layeh/gumble/gumble"
 	"github.com/matthieugrieger/mumbledj/state"
 	"github.com/spf13/viper"
@@ -29,5 +31,10 @@ func (c *ShuffleOffCommand) IsAdmin() bool {
 
 // Execute executes the command with the given bot state, user, and arguments.
 func (c *ShuffleOffCommand) Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, error) {
-	return nil, "", nil
+	if viper.GetBool("general.automaticshuffleon") {
+		viper.Set("general.automaticshuffleon", false)
+		return nil, "Automatic shuffling has been toggled off.", nil
+	}
+
+	return nil, "", errors.New("Automatic shuffling is already toggled off.")
 }
