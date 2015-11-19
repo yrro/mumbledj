@@ -37,9 +37,6 @@ func (c *VolumeCommand) Execute(state *state.BotState, user *gumble.User, args .
 		// Send the user the current volume level.
 		return nil, fmt.Sprintf("The current volume is <b>%.2f</b>.", state.AudioStream.Volume), nil
 	}
-	if len(args) > 1 {
-		return nil, "", errors.New("The volume command only accepts 0-1 arguments.")
-	}
 
 	newVolume, err := strconv.ParseFloat(args[0], 64)
 	if err != nil {

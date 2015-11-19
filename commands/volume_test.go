@@ -59,6 +59,15 @@ func (suite *VolumeCommandTestSuite) TestExecuteWithValidVolume() {
 	suite.Equal(float32(0.3), state.AudioStream.Volume, "The returned state should have the new volume assigned to it.")
 }
 
+func (suite *VolumeCommandTestSuite) TestExecuteWithExtraArguments() {
+	state, message, err := suite.Command.Execute(suite.State, suite.User, "0.3", "extra")
+
+	suite.NotNil(state, "No error occurred, so the returned state should be nil.")
+	suite.NotEqual("", message, "No error occurred, so the returned message should not be empty.")
+	suite.Nil(err, "No error occurred, so the returned error should be nil.")
+	suite.Equal(float32(0.3), state.AudioStream.Volume, "The returned state should have the new volume assigned to it.")
+}
+
 func (suite *VolumeCommandTestSuite) TestExecuteWithNoArguments() {
 	state, message, err := suite.Command.Execute(suite.State, suite.User)
 
@@ -66,14 +75,6 @@ func (suite *VolumeCommandTestSuite) TestExecuteWithNoArguments() {
 	suite.NotEqual("", message, "No error occurred, so the returned message should not be empty.")
 	suite.Nil(err, "No error occurred, so the returned error should be nil.")
 	suite.Contains(message, strconv.FormatFloat(viper.GetFloat64("volume.default"), 'f', 2, 32), "The returned message should contain the current volume.")
-}
-
-func (suite *VolumeCommandTestSuite) TestExecuteWithTooManyArguments() {
-	state, message, err := suite.Command.Execute(nil, nil, "arg1", "arg2")
-
-	suite.Nil(state, "An error occurred so no state should be returned.")
-	suite.Equal("", message, "An error occurred so no message should be returned.")
-	suite.NotNil(err, "An error should be returned for providing too many arguments.")
 }
 
 func (suite *VolumeCommandTestSuite) TestExecuteWithVolumeTooLow() {
