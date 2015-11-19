@@ -8,6 +8,8 @@
 package commands
 
 import (
+	"errors"
+
 	"github.com/layeh/gumble/gumble"
 	"github.com/matthieugrieger/mumbledj/state"
 	"github.com/spf13/viper"
@@ -29,5 +31,14 @@ func (c *ShuffleCommand) IsAdmin() bool {
 
 // Execute executes the command with the given bot state, user, and arguments.
 func (c *ShuffleCommand) Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, error) {
-	return nil, "", nil
+	if len(state.Queue.Queue) == 0 {
+		return nil, "", errors.New("There are no tracks currently in the queue.")
+	}
+	if len(state.Queue.Queue) <= 2 {
+		return nil, "", errors.New("There are not enough tracks to execute a shuffle operation.")
+	}
+
+	state.Queue.ShuffleTracks()
+
+	return state, "The audio queue has been shuffled.", nil
 }
