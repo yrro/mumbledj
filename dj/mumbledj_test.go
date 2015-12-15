@@ -11,7 +11,7 @@ import (
 	"testing"
 
 	"github.com/layeh/gumble/gumble"
-	"github.com/layeh/gumble/gumble_ffmpeg"
+	"github.com/layeh/gumble/gumbleffmpeg"
 	"github.com/matthieugrieger/mumbledj/state"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/mock"
@@ -34,7 +34,7 @@ type MockedGumbleConfig struct {
 }
 
 type MockedAudioStream struct {
-	gumble_ffmpeg.Stream
+	gumbleffmpeg.Stream
 	mock.Mock
 }
 
