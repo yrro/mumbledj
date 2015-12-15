@@ -33,7 +33,7 @@ MumbleDJ Refactor To-do List
     * [ ] Implementation
     * [ ] Unit tests
   * numcached
-    * [ ] Implementation
+    * [x] Implementation
     * [ ] Unit tests
   * numtracks
     * [ ] Implementation

@@ -8,6 +8,9 @@
 package commands
 
 import (
+	"errors"
+	"fmt"
+
 	"github.com/layeh/gumble/gumble"
 	"github.com/matthieugrieger/mumbledj/state"
 	"github.com/spf13/viper"
@@ -30,5 +33,10 @@ func (c *NumCachedCommand) IsAdmin() bool {
 
 // Execute executes the command with the given bot state, user, and arguments.
 func (c *NumCachedCommand) Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, bool, error) {
-	return nil, "", false, nil
+	if !viper.GetBool("cache.enabled") {
+		return nil, "", true, errors.New("Caching is currently disabled.")
+	}
+
+	state.Cache.UpdateStats()
+	return nil, fmt.Sprintf("There are currently %d items stored in the cache.", state.Cache.NumAudioFiles), true, nil
 }
