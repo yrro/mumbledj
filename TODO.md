@@ -110,3 +110,8 @@ MumbleDJ Refactor To-do List
   * [ ] Attempt to support `go install`
   * [ ] Attempt to support Docker installs
   * [ ] Attempt to make compilation process simpler
+* Automation
+  * [ ] Integrate a continuous integration tool such as Travis CI
+  * [ ] Integrate an automated coverage tool such as Coveralls
+* Gumble
+  * [ ] Update to comply with new API changes
