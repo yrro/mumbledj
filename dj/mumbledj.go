@@ -12,7 +12,6 @@ import (
 	"time"
 
 	"github.com/layeh/gumble/gumble"
-	"github.com/layeh/gumble/gumble_ffmpeg"
 	"github.com/layeh/gumble/gumbleutil"
 	"github.com/matthieugrieger/mumbledj/state"
 	"github.com/spf13/viper"
@@ -31,7 +30,7 @@ type MumbleDJ struct {
 func (dj *MumbleDJ) OnConnect(e *gumble.ConnectEvent) {
 	dj.State.Client.Self.Move(dj.State.Client.Channels.Find(viper.GetStringSlice("general.defaultchannel")...))
 
-	dj.State.AudioStream = gumble_ffmpeg.New(dj.State.Client)
+	dj.State.AudioStream = nil
 	dj.State.AudioStream.Volume = float32(viper.GetFloat64("volume.default"))
 
 	dj.State.Client.Self.SetComment(viper.GetString("general.defaultcomment"))
