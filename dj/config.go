@@ -72,6 +72,7 @@ func SetDefaultConfiguration() {
 	viper.SetDefault("aliases.shuffle", []string{"shuffle", "shuf", "sh"})
 	viper.SetDefault("aliases.shuffleon", []string{"shuffleon", "shufon", "shon"})
 	viper.SetDefault("aliases.shuffleoff", []string{"shuffleoff", "shufoff", "shoff"})
+	viper.SetDefault("aliases.listtracks", []string{"listtracks", "listsongs", "list", "l"})
 
 	// Permissions configuration
 	viper.SetDefault("permissions.adminsenabled", true)
@@ -95,6 +96,7 @@ func SetDefaultConfiguration() {
 	viper.SetDefault("permissions.kill", true)
 	viper.SetDefault("permissions.shuffle", true)
 	viper.SetDefault("permissions.shuffletoggle", true)
+	viper.SetDefault("permissions.listtracks", false)
 
 	// Command description configuration
 	viper.SetDefault("descriptions.add", "Adds a track or playlist from YouTube or SoundCloud to the audio queue.")
@@ -117,4 +119,5 @@ func SetDefaultConfiguration() {
 	viper.SetDefault("descriptions.shuffle", "Randomizes the tracks currently in the audio queue.")
 	viper.SetDefault("descriptions.shuffleon", "Toggles permanent track shuffling on.")
 	viper.SetDefault("descriptions.shuffleoff", "Toggles permanent track shuffling off.")
+	viper.SetDefault("descriptions.listtracks", "Outputs a list of the tracks currently in the queue.")
 }
