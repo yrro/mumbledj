@@ -1,0 +1,112 @@
+MumbleDJ Refactor To-do List
+============================
+
+* Commands
+  * add
+    * [ ] Implementation
+    * [ ] Unit tests
+  * cachesize
+    * [x] Implementation
+    * [ ] Unit tests
+  * currenttrack
+    * [x] Implementation
+    * [x] Unit tests
+  * forceskip
+    * [ ] Implementation
+    * [ ] Unit tests
+  * forceskipplaylist
+    * [ ] Implementation
+    * [ ] Unit tests
+  * help
+    * [ ] Implementation
+    * [ ] Unit tests
+  * kill
+    * [ ] Implementation
+    * [ ] Unit tests
+  * listtracks
+    * [ ] Implementation
+    * [ ] Unit tests
+  * move
+    * [ ] Implementation
+    * [ ] Unit tests
+  * nexttrack
+    * [ ] Implementation
+    * [ ] Unit tests
+  * numcached
+    * [ ] Implementation
+    * [ ] Unit tests
+  * numtracks
+    * [ ] Implementation
+    * [ ] Unit tests
+  * reload
+    * [ ] Implementation
+    * [ ] Unit tests
+  * reset
+    * [ ] Implementation
+    * [ ] Unit tests
+  * setcomment
+    * [ ] Implementation
+    * [ ] Unit tests
+  * shuffle
+    * [x] Implementation
+    * [x] Unit tests
+  * shuffleoff
+    * [x] Implementation
+    * [x] Unit tests
+  * shuffleon
+    * [x] Implementation
+    * [x] Unit tests
+  * skip
+    * [ ] Implementation
+    * [ ] Unit tests
+  * skipplaylist
+    * [ ] Implementation
+    * [ ] Unit tests
+  * volume
+    * [x] Implementation
+    * [x] Unit tests
+* State
+  * AudioCache
+    * [x] Implementation
+    * [ ] Unit tests
+  * AudioQueue
+    * [x] Implementation
+    * [x] Unit tests
+  * BotState
+    * [x] Implementation
+  * SkipTracker
+    * [x] Implementation
+    * [x] Unit tests
+* DJ
+  * Commander
+    * [x] Implementation
+    * [ ] Unit tests
+  * Config
+    * [x] Default values
+    * [ ] Commandline overrides
+    * [ ] Environment variable overrides
+    * [ ] Config file overrides
+    * [ ] Unit tests
+  * MumbleDJ
+    * [ ] Startup checks
+    * [ ] Mumble server connection
+    * [x] Gumble event listener implementation
+* Audio
+  * YouTube
+    * [ ] Tracks
+    * [ ] Playlists
+  * SoundCloud
+    * [ ] Tracks
+    * [ ] Playlists
+* README
+  * [ ] Reorganize
+  * [ ] Simplify installation instructions
+  * [ ] Simplify command listing
+* CONTRIBUTING
+  * [ ] Create CONTRIBUTING.md
+  * [ ] Create detailed instructions for adding new commands
+  * [ ] Create detailed instructions for proper formatting
+* Installation
+  * [ ] Attempt to support `go install`
+  * [ ] Attempt to support Docker installs
+  * [ ] Attempt to make compilation process simpler
