@@ -28,6 +28,6 @@ func (c *KillCommand) IsAdmin() bool {
 }
 
 // Execute executes the command with the given bot state, user, and arguments.
-func (c *KillCommand) Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, error) {
-	return nil, "", nil
+func (c *KillCommand) Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, bool, error) {
+	return nil, "", false, nil
 }

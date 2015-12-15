@@ -16,5 +16,5 @@ import (
 type Command interface {
 	Aliases() []string
 	IsAdmin() bool
-	Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, error)
+	Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, bool, error)
 }

@@ -28,6 +28,6 @@ func (c *NextTrackCommand) IsAdmin() bool {
 }
 
 // Execute executes the command with the given bot state, user, and arguments.
-func (c *NextTrackCommand) Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, error) {
-	return nil, "", nil
+func (c *NextTrackCommand) Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, bool, error) {
+	return nil, "", false, nil
 }

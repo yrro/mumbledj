@@ -40,10 +40,11 @@ func (suite *CurrentTrackCommandTestSuite) TestIsAdmin() {
 }
 
 func (suite *CurrentTrackCommandTestSuite) TestExecuteWhenQueueIsEmpty() {
-	state, message, err := suite.Command.Execute(suite.State, nil)
+	state, message, isPrivateMessage, err := suite.Command.Execute(suite.State, nil)
 
 	suite.Nil(state, "No state should be returned since an error occurred.")
 	suite.Equal("", message, "No message should be returned since an error occurred.")
+	suite.True(isPrivateMessage, "This should be a private message.")
 	suite.NotNil(err, "An error should be returned since the queue is empty.")
 }
 

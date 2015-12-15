@@ -31,12 +31,12 @@ func (c *CurrentTrackCommand) IsAdmin() bool {
 }
 
 // Execute executes the command with the given bot state, user, and arguments.
-func (c *CurrentTrackCommand) Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, error) {
+func (c *CurrentTrackCommand) Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, bool, error) {
 	if len(state.Queue.Queue) == 0 {
-		return nil, "", errors.New("There are no tracks in the queue.")
+		return nil, "", true, errors.New("There are no tracks in the queue.")
 	}
 
 	currentTrack := state.Queue.Queue[0]
 
-	return nil, fmt.Sprintf("The current track is <b>%s</b>, added by <b>%s</b>.", currentTrack.Title(), currentTrack.Submitter()), nil
+	return nil, fmt.Sprintf("The current track is <b>%s</b>, added by <b>%s</b>.", currentTrack.Title(), currentTrack.Submitter()), true, nil
 }

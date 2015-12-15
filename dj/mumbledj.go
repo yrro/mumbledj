@@ -75,14 +75,18 @@ func (dj *MumbleDJ) OnTextMessage(e *gumble.TextMessageEvent) {
 	plainMessage := gumbleutil.PlainText(&e.TextMessage)
 	if len(plainMessage) != 0 {
 		if plainMessage[0] == viper.GetString("general.commandprefix")[0] && plainMessage != viper.GetString("general.commandprefix") {
-			state, message, err := dj.Commander.FindAndExecuteCommand(dj.State, e.Sender, plainMessage[1:])
+			state, message, isPrivateMessage, err := dj.Commander.FindAndExecuteCommand(dj.State, e.Sender, plainMessage[1:])
 			if state != nil {
 				dj.State = state
 			}
 			if err != nil {
 				dj.SendPrivateMessage(e.Sender, fmt.Sprintf("An error occurred while executing your command: %s", err.Error()))
 			} else {
-				dj.State.Client.Self.Channel.Send(message, false)
+				if isPrivateMessage {
+					dj.SendPrivateMessage(e.Sender, message)
+				} else {
+					dj.State.Client.Self.Channel.Send(message, false)
+				}
 			}
 		}
 	}

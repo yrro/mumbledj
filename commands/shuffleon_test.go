@@ -34,20 +34,22 @@ func (suite *ShuffleOnCommandTestSuite) TestIsAdmin() {
 func (suite *ShuffleOnCommandTestSuite) TestExecuteWhenAutomaticShuffleOn() {
 	viper.Set("general.automaticshuffleon", true)
 
-	state, message, err := suite.Command.Execute(nil, nil)
+	state, message, isPrivateMessage, err := suite.Command.Execute(nil, nil)
 
 	suite.Nil(state, "This command shouldn't return a state.")
 	suite.Equal("", message, "No message should be returned since an error occurred.")
+	suite.True(isPrivateMessage, "This should be a private message.")
 	suite.NotNil(err, "An error should be returned since automatic shuffling is already toggled on.")
 }
 
 func (suite *ShuffleOnCommandTestSuite) TestExecuteWhenAutomaticShuffleOff() {
 	viper.Set("general.automaticshuffleon", false)
 
-	state, message, err := suite.Command.Execute(nil, nil)
+	state, message, isPrivateMessage, err := suite.Command.Execute(nil, nil)
 
 	suite.Nil(state, "This command shouldn't return a state.")
 	suite.NotEqual("", message, "A message should be returned as automatic shuffling has been successfully toggled on.")
+	suite.False(isPrivateMessage, "This message should not be private.")
 	suite.Nil(err, "No error should be returned.")
 }
 

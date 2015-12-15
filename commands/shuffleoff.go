@@ -30,11 +30,11 @@ func (c *ShuffleOffCommand) IsAdmin() bool {
 }
 
 // Execute executes the command with the given bot state, user, and arguments.
-func (c *ShuffleOffCommand) Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, error) {
+func (c *ShuffleOffCommand) Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, bool, error) {
 	if viper.GetBool("general.automaticshuffleon") {
 		viper.Set("general.automaticshuffleon", false)
-		return nil, "Automatic shuffling has been toggled off.", nil
+		return nil, "Automatic shuffling has been toggled off.", false, nil
 	}
 
-	return nil, "", errors.New("Automatic shuffling is already toggled off.")
+	return nil, "", true, errors.New("Automatic shuffling is already toggled off.")
 }

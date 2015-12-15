@@ -34,10 +34,11 @@ func (suite *CacheSizeCommandTestSuite) TestIsAdmin() {
 
 func (suite *CacheSizeCommandTestSuite) TestExecuteWhenCachingIsDisabled() {
 	viper.Set("cache.enabled", false)
-	state, message, err := suite.Command.Execute(nil, nil)
+	state, message, isPrivateMessage, err := suite.Command.Execute(nil, nil)
 
 	suite.Nil(state, "An error occurred so no state should be returned.")
 	suite.Equal("", message, "An error occurred so no message should be returned.")
+	suite.True(isPrivateMessage, "This should be a private message.")
 	suite.NotNil(err, "An error should be returned because caching is disabled.")
 }
 

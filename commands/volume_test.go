@@ -51,45 +51,50 @@ func (suite *VolumeCommandTestSuite) TestIsAdmin() {
 }
 
 func (suite *VolumeCommandTestSuite) TestExecuteWithValidVolume() {
-	state, message, err := suite.Command.Execute(suite.State, suite.User, "0.3")
+	state, message, isPrivateMessage, err := suite.Command.Execute(suite.State, suite.User, "0.3")
 
 	suite.NotNil(state, "No error occurred, so the returned state should not be nil.")
 	suite.NotEqual("", message, "No error occurred, so the returned message should not be empty.")
+	suite.False(isPrivateMessage, "This message should not be private.")
 	suite.Nil(err, "No error occurred, so the returned error should be nil.")
 	suite.Equal(float32(0.3), state.AudioStream.Volume, "The returned state should have the new volume assigned to it.")
 }
 
 func (suite *VolumeCommandTestSuite) TestExecuteWithExtraArguments() {
-	state, message, err := suite.Command.Execute(suite.State, suite.User, "0.3", "extra")
+	state, message, isPrivateMessage, err := suite.Command.Execute(suite.State, suite.User, "0.3", "extra")
 
 	suite.NotNil(state, "No error occurred, so the returned state should be nil.")
 	suite.NotEqual("", message, "No error occurred, so the returned message should not be empty.")
+	suite.False(isPrivateMessage, "This message should not be private.")
 	suite.Nil(err, "No error occurred, so the returned error should be nil.")
 	suite.Equal(float32(0.3), state.AudioStream.Volume, "The returned state should have the new volume assigned to it.")
 }
 
 func (suite *VolumeCommandTestSuite) TestExecuteWithNoArguments() {
-	state, message, err := suite.Command.Execute(suite.State, suite.User)
+	state, message, isPrivateMessage, err := suite.Command.Execute(suite.State, suite.User)
 
 	suite.Nil(state, "This command does not alter the bot's state, so a new state shouldn't be returned.")
 	suite.NotEqual("", message, "No error occurred, so the returned message should not be empty.")
+	suite.True(isPrivateMessage, "This should be a private message.")
 	suite.Nil(err, "No error occurred, so the returned error should be nil.")
 	suite.Contains(message, strconv.FormatFloat(viper.GetFloat64("volume.default"), 'f', 2, 32), "The returned message should contain the current volume.")
 }
 
 func (suite *VolumeCommandTestSuite) TestExecuteWithVolumeTooLow() {
-	state, message, err := suite.Command.Execute(nil, nil, "0.0001")
+	state, message, isPrivateMessage, err := suite.Command.Execute(nil, nil, "0.0001")
 
 	suite.Nil(state, "An error occurred so no state should be returned.")
 	suite.Equal("", message, "An error occurred so no message should be returned.")
+	suite.True(isPrivateMessage, "This should be a private message.")
 	suite.NotNil(err, "An error should be returned for providing a volume that is too low.")
 }
 
 func (suite *VolumeCommandTestSuite) TestExecuteWithVolumeTooHigh() {
-	state, message, err := suite.Command.Execute(nil, nil, "1.0")
+	state, message, isPrivateMessage, err := suite.Command.Execute(nil, nil, "1.0")
 
 	suite.Nil(state, "An error occurred so no state should be returned.")
 	suite.Equal("", message, "An error occurred so no message should be returned.")
+	suite.True(isPrivateMessage, "This should be a private message.")
 	suite.NotNil(err, "An error should be returned for providing a volume that is too high.")
 }
 

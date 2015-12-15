@@ -47,28 +47,31 @@ func (suite *ShuffleCommandTestSuite) TestIsAdmin() {
 }
 
 func (suite *ShuffleCommandTestSuite) TestExecuteWithEmptyQueue() {
-	state, message, err := suite.Command.Execute(suite.State, nil)
+	state, message, isPrivateMessage, err := suite.Command.Execute(suite.State, nil)
 
 	suite.Nil(state, "No state should be returned since an error occurred.")
 	suite.Equal("", message, "No message should be returned since an error occurred.")
+	suite.True(isPrivateMessage, "This should be a private message.")
 	suite.NotNil(err, "An error should be returned for attempting to shuffle an empty queue.")
 }
 
 func (suite *ShuffleCommandTestSuite) TestExecuteWithNotEnoughTracks() {
 	suite.State.Queue.AddTrack(new(MockedAudioTrack))
 
-	state, message, err := suite.Command.Execute(suite.State, nil)
+	state, message, isPrivateMessage, err := suite.Command.Execute(suite.State, nil)
 	suite.Equal(1, len(suite.State.Queue.Queue))
 	suite.Nil(state, "No state should be returned since an error occurred.")
 	suite.Equal("", message, "No message should be returned since an error occurred.")
+	suite.True(isPrivateMessage, "This should be a private message.")
 	suite.NotNil(err, "An error should be returned for attempting to shuffle a queue with only one track.")
 
 	suite.State.Queue.AddTrack(new(MockedAudioTrack))
 
-	state, message, err = suite.Command.Execute(suite.State, nil)
+	state, message, isPrivateMessage, err = suite.Command.Execute(suite.State, nil)
 	suite.Equal(2, len(suite.State.Queue.Queue))
 	suite.Nil(state, "No state should be returned since an error occurred.")
 	suite.Equal("", message, "No message should be returned since an error occurred.")
+	suite.True(isPrivateMessage, "This should be a private message.")
 	suite.NotNil(err, "An error should be returned for attempting to shuffle a queue with only two tracks.")
 }
 
@@ -77,10 +80,11 @@ func (suite *ShuffleCommandTestSuite) TestExecuteWithValidQueue() {
 	suite.State.Queue.AddTrack(new(MockedAudioTrack))
 	suite.State.Queue.AddTrack(new(MockedAudioTrack))
 
-	state, message, err := suite.Command.Execute(suite.State, nil)
+	state, message, isPrivateMessage, err := suite.Command.Execute(suite.State, nil)
 	suite.Equal(3, len(suite.State.Queue.Queue))
 	suite.NotNil(state, "An updated state should be returned since the execution was successful.")
 	suite.NotEqual("", message, "A message should be returned since the execution was successful.")
+	suite.False(isPrivateMessage, "This message should not be private.")
 	suite.Nil(err, "No error should be returned.")
 }
 
