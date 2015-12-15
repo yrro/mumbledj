@@ -77,6 +77,7 @@ func (suite *ConfigTestSuite) TestDefaultConfiguration() {
 	suite.Equal([]string{"shuffle", "shuf", "sh"}, viper.GetStringSlice("aliases.shuffle"))
 	suite.Equal([]string{"shuffleon", "shufon", "shon"}, viper.GetStringSlice("aliases.shuffleon"))
 	suite.Equal([]string{"shuffleoff", "shufoff", "shoff"}, viper.GetStringSlice("aliases.shuffleoff"))
+	suite.Equal([]string{"listtracks", "listsongs", "list", "l"}, viper.GetStringSlice("aliases.listtracks"))
 
 	suite.True(viper.GetBool("permissions.adminsenabled"))
 	suite.Equal([]string{"Matt"}, viper.GetStringSlice("permissions.admins"))
@@ -96,6 +97,29 @@ func (suite *ConfigTestSuite) TestDefaultConfiguration() {
 	suite.True(viper.GetBool("permissions.kill"))
 	suite.True(viper.GetBool("permissions.shuffle"))
 	suite.True(viper.GetBool("permissions.shuffletoggle"))
+	suite.False(viper.GetBool("permissions.listtracks"))
+
+	suite.Equal("Adds a track or playlist from YouTube or SoundCloud to the audio queue.", viper.GetString("descriptions.add"))
+	suite.Equal("Places a vote to skip the current track.", viper.GetString("descriptions.skip"))
+	suite.Equal("Places a vote to skip the current playlist.", viper.GetString("descriptions.skipplaylist"))
+	suite.Equal("Immediately skips the current track.", viper.GetString("descriptions.forceskip"))
+	suite.Equal("Immediately skips the current playlist.", viper.GetString("descriptions.forceskipplaylist"))
+	suite.Equal("Outputs this list of commands.", viper.GetString("descriptions.help"))
+	suite.Equal("Changes the volume if an argument is provided, outputs the current volume otherwise.", viper.GetString("descriptions.volume"))
+	suite.Equal("Moves the bot into the Mumble channel provided via argument.", viper.GetString("descriptions.move"))
+	suite.Equal("Reloads the configuration file.", viper.GetString("descriptions.reload"))
+	suite.Equal("Resets the audio queue by removing all queue items.", viper.GetString("descriptions.reset"))
+	suite.Equal("Outputs the number of tracks currently in the audio queue.", viper.GetString("descriptions.numtracks"))
+	suite.Equal("Outputs the title and submitter of the next track in the queue if one exists.", viper.GetString("descriptions.nexttrack"))
+	suite.Equal("Outputs the title and submitter of the current track if one exists.", viper.GetString("descriptions.currenttrack"))
+	suite.Equal("Sets the comment displayed next to MumbleDJ's username in Mumble.", viper.GetString("descriptions.setcomment"))
+	suite.Equal("Outputs the number of tracks cached on disk if caching is enabled.", viper.GetString("descriptions.numcached"))
+	suite.Equal("Outputs the file size of the cache in MiB if caching is enabled.", viper.GetString("descriptions.cachesize"))
+	suite.Equal("Stops the bot and cleans its cache directory.", viper.GetString("descriptions.kill"))
+	suite.Equal("Randomizes the tracks currently in the audio queue.", viper.GetString("descriptions.shuffle"))
+	suite.Equal("Toggles permanent track shuffling on.", viper.GetString("descriptions.shuffleon"))
+	suite.Equal("Toggles permanent track shuffling off.", viper.GetString("descriptions.shuffleoff"))
+	suite.Equal("Outputs a list of the tracks currently in the queue.", viper.GetString("descriptions.listtracks"))
 }
 
 func TestConfigTestSuite(t *testing.T) {
