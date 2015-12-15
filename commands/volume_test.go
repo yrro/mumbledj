@@ -12,7 +12,7 @@ import (
 	"testing"
 
 	"github.com/layeh/gumble/gumble"
-	"github.com/layeh/gumble/gumble_ffmpeg"
+	"github.com/layeh/gumble/gumbleffmpeg"
 	"github.com/matthieugrieger/mumbledj/state"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/suite"
@@ -35,7 +35,7 @@ func (suite *VolumeCommandTestSuite) SetupSuite() {
 
 func (suite *VolumeCommandTestSuite) SetupTest() {
 	suite.State = new(state.BotState)
-	suite.State.AudioStream = new(gumble_ffmpeg.Stream)
+	suite.State.AudioStream = new(gumbleffmpeg.Stream)
 	suite.State.AudioStream.Volume = float32(viper.GetFloat64("volume.default"))
 
 	suite.User = new(gumble.User)
