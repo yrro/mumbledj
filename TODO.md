@@ -30,14 +30,14 @@ MumbleDJ Refactor To-do List
     * [ ] Implementation
     * [ ] Unit tests
   * nexttrack
-    * [ ] Implementation
-    * [ ] Unit tests
+    * [x] Implementation
+    * [x] Unit tests
   * numcached
     * [x] Implementation
     * [ ] Unit tests
   * numtracks
-    * [ ] Implementation
-    * [ ] Unit tests
+    * [x] Implementation
+    * [x] Unit tests
   * reload
     * [ ] Implementation
     * [ ] Unit tests
