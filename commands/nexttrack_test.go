@@ -8,6 +8,8 @@
 package commands
 
 import (
+	"testing"
+
 	"github.com/matthieugrieger/mumbledj/state"
 	"github.com/matthieugrieger/mumbledj/testutils"
 	"github.com/spf13/viper"
@@ -68,4 +70,8 @@ func (suite *NextTrackCommandTestSuite) TestExecuteWhenQueueHasTwoOrMoreItems() 
 	suite.NotEqual("", message, "A message should be returned with the next track information.")
 	suite.True(isPrivateMessage, "This should be a private message.")
 	suite.Nil(err, "No error should be returned.")
+}
+
+func TestNextTrackCommandTestSuite(t *testing.T) {
+	suite.Run(t, new(NextTrackCommandTestSuite))
 }
