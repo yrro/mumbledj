@@ -11,6 +11,7 @@ import (
 	"testing"
 
 	"github.com/matthieugrieger/mumbledj/state"
+	"github.com/matthieugrieger/mumbledj/testutils"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/suite"
 )
@@ -48,9 +49,15 @@ func (suite *CurrentTrackCommandTestSuite) TestExecuteWhenQueueIsEmpty() {
 	suite.NotNil(err, "An error should be returned since the queue is empty.")
 }
 
-// TODO: Implement TestExecuteWhenQueueNotEmpty() test.
 func (suite *CurrentTrackCommandTestSuite) TestExecuteWhenQueueNotEmpty() {
+	suite.State.Queue.AddTrack(new(testutils.MockedAudioTrack))
 
+	state, message, isPrivateMessage, err := suite.Command.Execute(suite.State, nil)
+
+	suite.Nil(state, "No state should be returned since the state did not change.")
+	suite.NotEqual("", message, "A message should be returned with the current track information.")
+	suite.True(isPrivateMessage, "This should be a private message.")
+	suite.Nil(err, "No error should be returned.")
 }
 
 func TestCurrentTrackCommandTestSuite(t *testing.T) {
