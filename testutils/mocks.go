@@ -17,3 +17,13 @@ type MockedAudioTrack struct {
 	audio.Track
 	mock.Mock
 }
+
+// Title is a method that returns the title of the track.
+func (m *MockedAudioTrack) Title() string {
+	return "TestTrack"
+}
+
+// Submitter is a method that returns the submitter of the track.
+func (m *MockedAudioTrack) Submitter() string {
+	return "Matt"
+}
