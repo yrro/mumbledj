@@ -8,6 +8,8 @@
 package commands
 
 import (
+	"fmt"
+
 	"github.com/layeh/gumble/gumble"
 	"github.com/matthieugrieger/mumbledj/state"
 	"github.com/spf13/viper"
@@ -30,5 +32,9 @@ func (c *NumTracksCommand) IsAdmin() bool {
 
 // Execute executes the command with the given bot state, user, and arguments.
 func (c *NumTracksCommand) Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, bool, error) {
-	return nil, "", false, nil
+	if len(state.Queue.Queue) == 1 {
+		return nil, "There is currently <b>1</b> track in the queue.", true, nil
+	}
+
+	return nil, fmt.Sprintf("There are currently <b>%d</b> tracks in the queue.", len(state.Queue.Queue)), true, nil
 }
