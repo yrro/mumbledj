@@ -8,7 +8,11 @@
 package commands
 
 import (
+	"errors"
+	"fmt"
+
 	"github.com/layeh/gumble/gumble"
+	"github.com/matthieugrieger/mumbledj/audio"
 	"github.com/matthieugrieger/mumbledj/state"
 	"github.com/spf13/viper"
 )
@@ -30,5 +34,29 @@ func (c *AddCommand) IsAdmin() bool {
 
 // Execute executes the command with the given bot state, user, and arguments.
 func (c *AddCommand) Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, bool, error) {
-	return nil, "", false, nil
+	var allTracks []audio.Track
+
+	if len(args) == 0 {
+		return nil, "", true, errors.New("A URL must be supplied with the add command.")
+	}
+
+	for _, arg := range args {
+		tracks, err := state.Handler.GetTracks(arg)
+		if err == nil {
+			allTracks = append(allTracks, tracks...)
+		}
+	}
+
+	if len(allTracks) == 0 {
+		return nil, "", true, errors.New("No valid audio tracks were found with the provided URL(s).")
+	}
+
+	addString := fmt.Sprintf("<b>%s</b> added <b>%d</b> tracks to the queue:</br>", user.Name, len(allTracks))
+
+	for _, track := range allTracks {
+		state.Queue.AddTrack(track)
+		addString += fmt.Sprintf("\"%s\" from %s</br>", track.Title(), track.Service())
+	}
+
+	return state, addString, false, nil
 }
