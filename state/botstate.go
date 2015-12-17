@@ -12,6 +12,7 @@ import (
 
 	"github.com/layeh/gumble/gumble"
 	"github.com/layeh/gumble/gumbleffmpeg"
+	"github.com/matthieugrieger/mumbledj/audio"
 )
 
 // BotState is a struct that allows for important pieces of the bot's state
@@ -23,5 +24,6 @@ type BotState struct {
 	Queue        *AudioQueue
 	Cache        *AudioCache
 	Skips        *SkipTracker
+	Handler      audio.Handler
 	Log          log.Logger
 }
