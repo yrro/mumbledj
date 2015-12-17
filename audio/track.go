@@ -21,5 +21,6 @@ type Track interface {
 	Filename() string
 	Duration() time.Duration
 	Thumbnail() string
+	Service() string
 	Playlist() Playlist
 }

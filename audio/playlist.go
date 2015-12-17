@@ -12,4 +12,5 @@ package audio
 type Playlist interface {
 	ID() string
 	Title() string
+	Service() string
 }
