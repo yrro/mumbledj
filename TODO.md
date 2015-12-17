@@ -12,10 +12,10 @@ MumbleDJ Refactor To-do List
     * [x] Implementation
     * [x] Unit tests
   * forceskip
-    * [ ] Implementation
+    * [x] Implementation
     * [ ] Unit tests
   * forceskipplaylist
-    * [ ] Implementation
+    * [x] Implementation
     * [ ] Unit tests
   * help
     * [ ] Implementation
@@ -27,7 +27,7 @@ MumbleDJ Refactor To-do List
     * [ ] Implementation
     * [ ] Unit tests
   * move
-    * [ ] Implementation
+    * [x] Implementation
     * [ ] Unit tests
   * nexttrack
     * [x] Implementation
