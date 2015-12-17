@@ -9,9 +9,15 @@ package dj
 
 import "github.com/spf13/viper"
 
+// Config is a struct that gathers all logic related to configuration via
+// environment variables, commandline arguments, and configuration files.
+type Config struct {
+	ConfigFileLocation string
+}
+
 // SetDefaultConfiguration initalizes a Viper configuration with the default
 // values.
-func SetDefaultConfiguration() {
+func (c *Config) SetDefaultConfiguration() {
 	// General configuration
 	viper.SetDefault("general.commandprefix", "!")
 	viper.SetDefault("general.skipratio", 0.5)
@@ -120,4 +126,21 @@ func SetDefaultConfiguration() {
 	viper.SetDefault("descriptions.shuffleon", "Toggles permanent track shuffling on.")
 	viper.SetDefault("descriptions.shuffleoff", "Toggles permanent track shuffling off.")
 	viper.SetDefault("descriptions.listtracks", "Outputs a list of the tracks currently in the queue.")
+}
+
+// LoadFromConfigFile loads configuration values from the filepath specified via
+// the filepath argument.
+func (c *Config) LoadFromConfigFile(filepath string) error {
+	return nil
+}
+
+// LoadFromEnvironmentVariables loads configuration values from environment
+// variables.
+func (c *Config) LoadFromEnvironmentVariables() error {
+	return nil
+}
+
+// LoadFromCommandline loads configuration values from the commandline.
+func (c *Config) LoadFromCommandline() error {
+	return nil
 }
