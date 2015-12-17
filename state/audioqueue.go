@@ -78,6 +78,12 @@ func (q *AudioQueue) ShuffleTracks() {
 	}
 }
 
+// NextTrack removes the current track from the queue, making the next track the
+// current one.
+func (q *AudioQueue) NextTrack() {
+	q.Queue = q.Queue[1:]
+}
+
 // RandomNextTrack sets a random Track as the next Track to be played.
 func (q *AudioQueue) RandomNextTrack(queueWasEmpty bool) {
 	if len(q.Queue) > 1 {
@@ -88,4 +94,14 @@ func (q *AudioQueue) RandomNextTrack(queueWasEmpty bool) {
 		swapIndex := nextTrackIndex + rand.Intn(len(q.Queue)-1)
 		q.Queue[nextTrackIndex], q.Queue[swapIndex] = q.Queue[swapIndex], q.Queue[nextTrackIndex]
 	}
+}
+
+// Skip performs the necessary actions that take place when a track is skipped via a command.
+func (q *AudioQueue) Skip() {
+
+}
+
+// SkipPlaylist performs the necessary actions that take place when a playlist is skipped via a command.
+func (q *AudioQueue) SkipPlaylist() {
+
 }
