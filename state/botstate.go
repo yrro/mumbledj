@@ -13,6 +13,7 @@ import (
 	"github.com/layeh/gumble/gumble"
 	"github.com/layeh/gumble/gumbleffmpeg"
 	"github.com/matthieugrieger/mumbledj/audio"
+	"github.com/matthieugrieger/mumbledj/dj"
 )
 
 // BotState is a struct that allows for important pieces of the bot's state
@@ -20,6 +21,7 @@ import (
 type BotState struct {
 	Client       *gumble.Client
 	GumbleConfig *gumble.Config
+	Config       *dj.Config
 	AudioStream  *gumbleffmpeg.Stream
 	Queue        *AudioQueue
 	Cache        *AudioCache
