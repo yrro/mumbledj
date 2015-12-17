@@ -13,7 +13,8 @@ import (
 	"github.com/spf13/viper"
 )
 
-// ReloadCommand is a command that reloads the configuration values for the bot.
+// ReloadCommand is a command that reloads the configuration values for the bot
+// from a config file.
 type ReloadCommand struct{}
 
 // Aliases is a method that returns the current aliases for the command.

@@ -1,11 +1,11 @@
 /*
  * MumbleDJ
  * By Matthieu Grieger
- * dj/config_test.go
+ * state/config_test.go
  * Copyright (c) 2014, 2015 Matthieu Grieger (MIT License)
  */
 
-package dj
+package state
 
 import (
 	"testing"
@@ -15,11 +15,14 @@ import (
 )
 
 type ConfigTestSuite struct {
+	State *BotState
 	suite.Suite
 }
 
 func (suite *ConfigTestSuite) SetupTest() {
-	SetDefaultConfiguration()
+	suite.State = new(BotState)
+	suite.State.BotConfig = new(Config)
+	suite.State.BotConfig.SetDefaultConfiguration()
 }
 
 func (suite *ConfigTestSuite) TestDefaultConfiguration() {
