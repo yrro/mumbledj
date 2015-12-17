@@ -3,8 +3,8 @@ MumbleDJ Refactor To-do List
 
 * Commands
   * add
-    * [ ] Implementation
-    * [ ] Unit tests
+    * [x] Implementation
+    * [x] Unit tests
   * cachesize
     * [x] Implementation
     * [ ] Unit tests
@@ -98,6 +98,9 @@ MumbleDJ Refactor To-do List
   * SoundCloud
     * [ ] Tracks
     * [ ] Playlists
+  * AudioHandler
+    * [ ] Implement GetTracks
+    * [ ] Unit tests
 * README
   * [ ] Reorganize
   * [ ] Simplify installation instructions
