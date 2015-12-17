@@ -8,6 +8,10 @@
 package commands
 
 import (
+	"errors"
+	"fmt"
+	"strings"
+
 	"github.com/layeh/gumble/gumble"
 	"github.com/matthieugrieger/mumbledj/state"
 	"github.com/spf13/viper"
@@ -29,5 +33,15 @@ func (c *MoveCommand) IsAdmin() bool {
 
 // Execute executes the command with the given bot state, user, and arguments.
 func (c *MoveCommand) Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, bool, error) {
-	return nil, "", false, nil
+	if len(args) == 0 {
+		return nil, "", true, errors.New("A destination channel must be supplied to move the bot.")
+	}
+
+	if channels := strings.Split(args[0], "/"); state.Client.Channels.Find(channels...) != nil {
+		state.Client.Self.Move(state.Client.Channels.Find(channels...))
+	} else {
+		return nil, "", true, errors.New("The provided channel does not exist.")
+	}
+
+	return state, fmt.Sprintf("You have successfully moved the bot to <b>%s</b>.", args[0]), true, nil
 }
