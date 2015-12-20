@@ -80,14 +80,13 @@ func (c *Commander) FindCommand(message string) (Command, error) {
 // ExecuteCommand executes the passed command with the corresponding state, user, and message. The message is split by whitespace to make up the arguments
 // of a command.
 func (c *Commander) ExecuteCommand(currentState *state.BotState, user *gumble.User, message string, command Command) (*state.BotState, string, bool, error) {
-	var canExecute bool
+	canExecute := false
 	if viper.GetBool("permissions.adminsenabled") && command.IsAdmin() {
 		for _, username := range viper.GetStringSlice("permissions.admins") {
 			if user.Name == username {
 				canExecute = true
 			}
 		}
-		canExecute = false
 	} else {
 		canExecute = true
 	}
