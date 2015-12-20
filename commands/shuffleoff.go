@@ -23,6 +23,11 @@ func (c *ShuffleOffCommand) Aliases() []string {
 	return viper.GetStringSlice("aliases.shuffleoff")
 }
 
+// Description returns a description of the command.
+func (c *ShuffleOffCommand) Description() string {
+	return viper.GetString("descriptions.shuffleoff")
+}
+
 // IsAdmin is a command that returns a bool that determines if a command is an
 // admin command or not.
 func (c *ShuffleOffCommand) IsAdmin() bool {

@@ -24,6 +24,11 @@ func (c *CacheSizeCommand) Aliases() []string {
 	return viper.GetStringSlice("aliases.cachesize")
 }
 
+// Description returns a description of the command.
+func (c *CacheSizeCommand) Description() string {
+	return viper.GetString("descriptions.cachesize")
+}
+
 // IsAdmin is a command that returns a bool that determines if a command is an
 // admin command or not.
 func (c *CacheSizeCommand) IsAdmin() bool {

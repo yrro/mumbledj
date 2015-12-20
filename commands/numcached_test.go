@@ -21,11 +21,16 @@ type NumCachedCommandTestSuite struct {
 
 func (suite *NumCachedCommandTestSuite) SetupSuite() {
 	viper.Set("aliases.numcached", []string{"numcached", "nc"})
+	viper.Set("descriptions.numcached", "numcached")
 	viper.Set("permissions.numcached", true)
 }
 
 func (suite *NumCachedCommandTestSuite) TestAliases() {
 	suite.Equal([]string{"numcached", "nc"}, suite.Command.Aliases())
+}
+
+func (suite *NumCachedCommandTestSuite) TestDescription() {
+	suite.Equal("numcached", suite.Command.Description())
 }
 
 func (suite *NumCachedCommandTestSuite) TestIsAdmin() {

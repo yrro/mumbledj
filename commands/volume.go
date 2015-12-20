@@ -25,6 +25,11 @@ func (c *VolumeCommand) Aliases() []string {
 	return viper.GetStringSlice("aliases.volume")
 }
 
+// Description returns a description of the command.
+func (c *VolumeCommand) Description() string {
+	return viper.GetString("descriptions.volume")
+}
+
 // IsAdmin is a command that returns a bool that determines if a command is an
 // admin command or not.
 func (c *VolumeCommand) IsAdmin() bool {

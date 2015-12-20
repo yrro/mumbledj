@@ -24,6 +24,11 @@ func (c *ForceSkipCommand) Aliases() []string {
 	return viper.GetStringSlice("aliases.forceskip")
 }
 
+// Description returns a description of the command.
+func (c *ForceSkipCommand) Description() string {
+	return viper.GetString("descriptions.forceskip")
+}
+
 // IsAdmin is a command that returns a bool that determines if a command is an
 // admin command or not.
 func (c *ForceSkipCommand) IsAdmin() bool {

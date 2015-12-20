@@ -24,6 +24,7 @@ type NextTrackCommandTestSuite struct {
 
 func (suite *NextTrackCommandTestSuite) SetupSuite() {
 	viper.Set("aliases.nexttrack", []string{"nexttrack", "nextsong", "nt"})
+	viper.Set("descriptions.nexttrack", "nexttrack")
 	viper.Set("permissions.nexttrack", false)
 }
 
@@ -34,6 +35,10 @@ func (suite *NextTrackCommandTestSuite) SetupTest() {
 
 func (suite *NextTrackCommandTestSuite) TestAliases() {
 	suite.Equal([]string{"nexttrack", "nextsong", "nt"}, suite.Command.Aliases())
+}
+
+func (suite *NextTrackCommandTestSuite) TestDescription() {
+	suite.Equal("nexttrack", suite.Command.Description())
 }
 
 func (suite *NextTrackCommandTestSuite) TestIsAdmin() {

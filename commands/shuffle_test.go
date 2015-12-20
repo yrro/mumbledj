@@ -24,6 +24,7 @@ type ShuffleCommandTestSuite struct {
 
 func (suite *ShuffleCommandTestSuite) SetupSuite() {
 	viper.Set("aliases.shuffle", []string{"shuffle", "shuf", "sh"})
+	viper.Set("descriptions.shuffle", "shuffle")
 	viper.Set("permissions.shuffle", true)
 }
 
@@ -34,6 +35,10 @@ func (suite *ShuffleCommandTestSuite) SetupTest() {
 
 func (suite *ShuffleCommandTestSuite) TestAliases() {
 	suite.Equal([]string{"shuffle", "shuf", "sh"}, suite.Command.Aliases())
+}
+
+func (suite *ShuffleCommandTestSuite) TestDescription() {
+	suite.Equal("shuffle", suite.Command.Description())
 }
 
 func (suite *ShuffleCommandTestSuite) TestIsAdmin() {

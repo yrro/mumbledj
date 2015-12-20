@@ -25,6 +25,7 @@ type AddCommandTestSuite struct {
 
 func (suite *AddCommandTestSuite) SetupSuite() {
 	viper.Set("aliases.add", []string{"add", "a"})
+	viper.Set("descriptions.add", "add")
 	viper.Set("permissions.add", false)
 }
 
@@ -36,6 +37,10 @@ func (suite *AddCommandTestSuite) SetupTest() {
 
 func (suite *AddCommandTestSuite) TestAliases() {
 	suite.Equal([]string{"add", "a"}, suite.Command.Aliases())
+}
+
+func (suite *AddCommandTestSuite) TestDescription() {
+	suite.Equal("add", suite.Command.Description())
 }
 
 func (suite *AddCommandTestSuite) TestIsAdmin() {

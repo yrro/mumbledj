@@ -24,6 +24,7 @@ type NumTracksCommandTestSuite struct {
 
 func (suite *NumTracksCommandTestSuite) SetupSuite() {
 	viper.Set("aliases.numtracks", []string{"numtracks", "numsongs", "num"})
+	viper.Set("descriptions.numtracks", "numtracks")
 	viper.Set("permissions.numtracks", false)
 }
 
@@ -34,6 +35,10 @@ func (suite *NumTracksCommandTestSuite) SetupTest() {
 
 func (suite *NumTracksCommandTestSuite) TestAliases() {
 	suite.Equal([]string{"numtracks", "numsongs", "num"}, suite.Command.Aliases())
+}
+
+func (suite *NumTracksCommandTestSuite) TestDescription() {
+	suite.Equal("numtracks", suite.Command.Description())
 }
 
 func (suite *NumTracksCommandTestSuite) TestIsAdmin() {

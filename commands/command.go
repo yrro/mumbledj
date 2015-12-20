@@ -15,6 +15,7 @@ import (
 // Command is an interface that all commands must implement.
 type Command interface {
 	Aliases() []string
+	Description() string
 	IsAdmin() bool
 	Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, bool, error)
 }

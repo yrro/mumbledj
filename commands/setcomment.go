@@ -21,6 +21,11 @@ func (c *SetCommentCommand) Aliases() []string {
 	return viper.GetStringSlice("aliases.setcomment")
 }
 
+// Description returns a description of the command.
+func (c *SetCommentCommand) Description() string {
+	return viper.GetString("descriptions.setcomment")
+}
+
 // IsAdmin is a command that returns a bool that determines if a command is an
 // admin command or not.
 func (c *SetCommentCommand) IsAdmin() bool {

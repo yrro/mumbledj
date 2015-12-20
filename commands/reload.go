@@ -22,6 +22,11 @@ func (c *ReloadCommand) Aliases() []string {
 	return viper.GetStringSlice("aliases.reload")
 }
 
+// Description returns a description of the command.
+func (c *ReloadCommand) Description() string {
+	return viper.GetString("descriptions.reload")
+}
+
 // IsAdmin is a command that returns a bool that determines if a command is an
 // admin command or not.
 func (c *ReloadCommand) IsAdmin() bool {

@@ -26,6 +26,11 @@ func (c *AddCommand) Aliases() []string {
 	return viper.GetStringSlice("aliases.add")
 }
 
+// Description returns a description of the command.
+func (c *AddCommand) Description() string {
+	return viper.GetString("descriptions.add")
+}
+
 // IsAdmin is a command that returns a bool that determines if a command is an
 // admin command or not.
 func (c *AddCommand) IsAdmin() bool {

@@ -24,6 +24,7 @@ type CurrentTrackCommandTestSuite struct {
 
 func (suite *CurrentTrackCommandTestSuite) SetupSuite() {
 	viper.Set("aliases.currenttrack", []string{"currenttrack", "current"})
+	viper.Set("descriptions.currenttrack", "currenttrack")
 	viper.Set("permissions.currenttrack", false)
 }
 
@@ -34,6 +35,10 @@ func (suite *CurrentTrackCommandTestSuite) SetupTest() {
 
 func (suite *CurrentTrackCommandTestSuite) TestAliases() {
 	suite.Equal([]string{"currenttrack", "current"}, suite.Command.Aliases())
+}
+
+func (suite *CurrentTrackCommandTestSuite) TestDescription() {
+	suite.Equal("currenttrack", suite.Command.Description())
 }
 
 func (suite *CurrentTrackCommandTestSuite) TestIsAdmin() {

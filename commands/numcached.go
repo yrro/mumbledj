@@ -25,6 +25,11 @@ func (c *NumCachedCommand) Aliases() []string {
 	return viper.GetStringSlice("aliases.numcached")
 }
 
+// Description returns a description of the command.
+func (c *NumCachedCommand) Description() string {
+	return viper.GetString("descriptions.numcached")
+}
+
 // IsAdmin is a command that returns a bool that determines if a command is an
 // admin command or not.
 func (c *NumCachedCommand) IsAdmin() bool {

@@ -24,6 +24,11 @@ func (c *ForceSkipPlaylistCommand) Aliases() []string {
 	return viper.GetStringSlice("aliases.forceskipplaylist")
 }
 
+// Description returns a description of the command.
+func (c *ForceSkipPlaylistCommand) Description() string {
+	return viper.GetString("descriptions.forceskipplaylist")
+}
+
 // IsAdmin is a command that returns a bool that determines if a command is an
 // admin command or not.
 func (c *ForceSkipPlaylistCommand) IsAdmin() bool {

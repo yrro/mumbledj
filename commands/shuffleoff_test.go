@@ -21,14 +21,20 @@ type ShuffleOffCommandTestSuite struct {
 
 func (suite *ShuffleOffCommandTestSuite) SetupSuite() {
 	viper.Set("aliases.shuffleoff", []string{"shuffleoff", "shufoff", "shoff"})
+	viper.Set("descriptions.shuffleoff", "shuffleoff")
+	viper.Set("permissions.shuffleoff", true)
 }
 
 func (suite *ShuffleOffCommandTestSuite) TestAliases() {
 	suite.Equal([]string{"shuffleoff", "shufoff", "shoff"}, suite.Command.Aliases())
 }
 
+func (suite *ShuffleOffCommandTestSuite) TestDescription() {
+	suite.Equal("shuffleoff", suite.Command.Description())
+}
+
 func (suite *ShuffleOffCommandTestSuite) TestIsAdmin() {
-	suite.False(suite.Command.IsAdmin())
+	suite.True(suite.Command.IsAdmin())
 }
 
 func (suite *ShuffleOffCommandTestSuite) TestExecuteWhenAutomaticShuffleOn() {

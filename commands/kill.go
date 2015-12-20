@@ -21,6 +21,11 @@ func (c *KillCommand) Aliases() []string {
 	return viper.GetStringSlice("aliases.kill")
 }
 
+// Description returns a description of the command.
+func (c *KillCommand) Description() string {
+	return viper.GetString("descriptions.kill")
+}
+
 // IsAdmin is a command that returns a bool that determines if a command is an
 // admin command or not.
 func (c *KillCommand) IsAdmin() bool {

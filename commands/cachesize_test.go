@@ -21,11 +21,16 @@ type CacheSizeCommandTestSuite struct {
 
 func (suite *CacheSizeCommandTestSuite) SetupSuite() {
 	viper.Set("aliases.cachesize", []string{"cachesize", "cs"})
+	viper.Set("descriptions.cachesize", "cachesize")
 	viper.Set("permissions.cachesize", true)
 }
 
 func (suite *CacheSizeCommandTestSuite) TestAliases() {
 	suite.Equal([]string{"cachesize", "cs"}, suite.Command.Aliases())
+}
+
+func (suite *CacheSizeCommandTestSuite) TestDescription() {
+	suite.Equal("cachesize", suite.Command.Description())
 }
 
 func (suite *CacheSizeCommandTestSuite) TestIsAdmin() {

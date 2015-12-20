@@ -24,6 +24,11 @@ func (c *NextTrackCommand) Aliases() []string {
 	return viper.GetStringSlice("aliases.nexttrack")
 }
 
+// Description returns a description of the command.
+func (c *NextTrackCommand) Description() string {
+	return viper.GetString("descriptions.nexttrack")
+}
+
 // IsAdmin is a command that returns a bool that determines if a command is an
 // admin command or not.
 func (c *NextTrackCommand) IsAdmin() bool {

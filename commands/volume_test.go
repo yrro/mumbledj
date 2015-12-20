@@ -30,6 +30,7 @@ func (suite *VolumeCommandTestSuite) SetupSuite() {
 	viper.Set("volume.highest", 0.8)
 	viper.Set("volume.default", 0.4)
 	viper.Set("aliases.volume", []string{"volume", "v"})
+	viper.Set("descriptions.volume", "volume")
 	viper.Set("permissions.volume", false)
 }
 
@@ -44,6 +45,10 @@ func (suite *VolumeCommandTestSuite) SetupTest() {
 
 func (suite *VolumeCommandTestSuite) TestAliases() {
 	suite.Equal([]string{"volume", "v"}, suite.Command.Aliases())
+}
+
+func (suite *VolumeCommandTestSuite) TestDescription() {
+	suite.Equal("volume", suite.Command.Description())
 }
 
 func (suite *VolumeCommandTestSuite) TestIsAdmin() {
