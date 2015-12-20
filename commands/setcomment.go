@@ -8,6 +8,8 @@
 package commands
 
 import (
+	"fmt"
+
 	"github.com/layeh/gumble/gumble"
 	"github.com/matthieugrieger/mumbledj/state"
 	"github.com/spf13/viper"
@@ -34,5 +36,16 @@ func (c *SetCommentCommand) IsAdmin() bool {
 
 // Execute executes the command with the given bot state, user, and arguments.
 func (c *SetCommentCommand) Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, bool, error) {
-	return nil, "", false, nil
+	if len(args) == 0 {
+		state.Client.Self.SetComment("")
+		return state, "The comment for the bot has been successfully removed.", true, nil
+	}
+
+	newComment := ""
+	for _, arg := range args {
+		newComment += arg + " "
+	}
+	state.Client.Self.SetComment(newComment)
+
+	return state, fmt.Sprintf("The comment for the bot has been successfully changed to the following: %s", newComment), true, nil
 }

@@ -45,7 +45,7 @@ MumbleDJ Refactor To-do List
     * [ ] Implementation
     * [ ] Unit tests
   * setcomment
-    * [ ] Implementation
+    * [x] Implementation
     * [ ] Unit tests
   * shuffle
     * [x] Implementation
