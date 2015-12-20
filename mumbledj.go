@@ -1,11 +1,11 @@
 /*
  * MumbleDJ
  * By Matthieu Grieger
- * dj/mumbledj.go
+ * mumbledj.go
  * Copyright (c) 2014, 2015 Matthieu Grieger (MIT License)
  */
 
-package dj
+package main
 
 import (
 	"fmt"
@@ -13,6 +13,7 @@ import (
 
 	"github.com/layeh/gumble/gumble"
 	"github.com/layeh/gumble/gumbleutil"
+	"github.com/matthieugrieger/mumbledj/commands"
 	"github.com/matthieugrieger/mumbledj/state"
 	"github.com/spf13/viper"
 )
@@ -21,7 +22,7 @@ import (
 type MumbleDJ struct {
 	GumbleConfig gumble.Config
 	KeepAlive    chan bool
-	Commander    *Commander
+	Commander    *commands.Commander
 	State        *state.BotState
 }
 
@@ -113,4 +114,8 @@ func (dj *MumbleDJ) SendPrivateMessage(user *gumble.User, message string) {
 // operations.
 func (dj *MumbleDJ) Start() error {
 	return nil
+}
+
+func main() {
+
 }

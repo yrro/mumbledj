@@ -1,11 +1,11 @@
 /*
  * MumbleDJ
  * By Matthieu Grieger
- * interfaces/command.go
+ * commands/command.go
  * Copyright (c) 2014, 2015 Matthieu Grieger (MIT License)
  */
 
-package interfaces
+package commands
 
 import (
 	"github.com/layeh/gumble/gumble"

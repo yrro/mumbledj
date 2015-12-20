@@ -1,56 +1,22 @@
 /*
  * MumbleDJ
  * By Matthieu Grieger
- * dj/mumbledj_test.go
+ * mumbledj_test.go
  * Copyright (c) 2014, 2015 Matthieu Grieger (MIT License)
  */
 
-package dj
+package main
 
 import (
 	"testing"
 
-	"github.com/layeh/gumble/gumble"
-	"github.com/layeh/gumble/gumbleffmpeg"
-	"github.com/matthieugrieger/mumbledj/state"
 	"github.com/spf13/viper"
-	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 )
 
 type MumbleDJTestSuite struct {
 	Bot MumbleDJ
 	suite.Suite
-}
-
-type MockedGumbleClient struct {
-	gumble.Client
-	mock.Mock
-}
-
-type MockedGumbleConfig struct {
-	gumble.Config
-	mock.Mock
-}
-
-type MockedAudioStream struct {
-	gumbleffmpeg.Stream
-	mock.Mock
-}
-
-type MockedQueue struct {
-	state.AudioQueue
-	mock.Mock
-}
-
-type MockedCache struct {
-	state.AudioCache
-	mock.Mock
-}
-
-type MockedCommander struct {
-	Commander
-	mock.Mock
 }
 
 func (suite *MumbleDJTestSuite) SetupTest() {

@@ -1,19 +1,17 @@
 /*
  * MumbleDJ
  * By Matthieu Grieger
- * dj/commander.go
+ * commands/commander.go
  * Copyright (c) 2014, 2015 Matthieu Grieger (MIT License)
  */
 
-package dj
+package commands
 
 import (
 	"errors"
 	"strings"
 
 	"github.com/layeh/gumble/gumble"
-	"github.com/matthieugrieger/mumbledj/commands"
-	"github.com/matthieugrieger/mumbledj/interfaces"
 	"github.com/matthieugrieger/mumbledj/state"
 	"github.com/spf13/viper"
 )
@@ -21,32 +19,33 @@ import (
 // Commander is a struct that holds all available commands and provides
 // methods that allow interactions with said commands.
 type Commander struct {
-	Commands []interfaces.Command
+	Commands []Command
 }
 
 // NewCommander returns a new commander with an initialized command list.
 func NewCommander() *Commander {
-	commands := []interfaces.Command{
-		new(commands.AddCommand),
-		new(commands.CacheSizeCommand),
-		new(commands.CurrentTrackCommand),
-		new(commands.ForceSkipCommand),
-		new(commands.ForceSkipPlaylistCommand),
-		new(commands.HelpCommand),
-		new(commands.KillCommand),
-		new(commands.MoveCommand),
-		new(commands.NextTrackCommand),
-		new(commands.NumCachedCommand),
-		new(commands.NumTracksCommand),
-		new(commands.ReloadCommand),
-		new(commands.ResetCommand),
-		new(commands.SetCommentCommand),
-		new(commands.ShuffleCommand),
-		new(commands.ShuffleOffCommand),
-		new(commands.ShuffleOnCommand),
-		new(commands.SkipCommand),
-		new(commands.SkipPlaylistCommand),
-		new(commands.VolumeCommand),
+	commands := []Command{
+		new(AddCommand),
+		new(CacheSizeCommand),
+		new(CurrentTrackCommand),
+		new(ForceSkipCommand),
+		new(ForceSkipPlaylistCommand),
+		new(HelpCommand),
+		new(KillCommand),
+		new(ListTracksCommand),
+		new(MoveCommand),
+		new(NextTrackCommand),
+		new(NumCachedCommand),
+		new(NumTracksCommand),
+		new(ReloadCommand),
+		new(ResetCommand),
+		new(SetCommentCommand),
+		new(ShuffleCommand),
+		new(ShuffleOffCommand),
+		new(ShuffleOnCommand),
+		new(SkipCommand),
+		new(SkipPlaylistCommand),
+		new(VolumeCommand),
 	}
 
 	return &Commander{
@@ -66,7 +65,7 @@ func (c *Commander) FindAndExecuteCommand(currentState *state.BotState, user *gu
 }
 
 // FindCommand returns the command that corresponds with the incoming message.
-func (c *Commander) FindCommand(message string) (interfaces.Command, error) {
+func (c *Commander) FindCommand(message string) (Command, error) {
 	possibleCommand := strings.ToLower(message[0:strings.Index(message, " ")])
 	for _, command := range c.Commands {
 		for _, alias := range command.Aliases() {
@@ -80,7 +79,7 @@ func (c *Commander) FindCommand(message string) (interfaces.Command, error) {
 
 // ExecuteCommand executes the passed command with the corresponding state, user, and message. The message is split by whitespace to make up the arguments
 // of a command.
-func (c *Commander) ExecuteCommand(currentState *state.BotState, user *gumble.User, message string, command interfaces.Command) (*state.BotState, string, bool, error) {
+func (c *Commander) ExecuteCommand(currentState *state.BotState, user *gumble.User, message string, command Command) (*state.BotState, string, bool, error) {
 	var canExecute bool
 	if viper.GetBool("permissions.adminsenabled") && command.IsAdmin() {
 		for _, username := range viper.GetStringSlice("permissions.admins") {

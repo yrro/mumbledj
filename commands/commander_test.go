@@ -1,29 +1,22 @@
 /*
  * MumbleDJ
  * By Matthieu Grieger
- * dj/commander_test.go
+ * commands/commander_test.go
  * Copyright (c) 2014, 2015 Matthieu Grieger (MIT License)
  */
 
-package dj
+package commands
 
 import (
 	"testing"
 
-	"github.com/matthieugrieger/mumbledj/commands"
 	"github.com/spf13/viper"
-	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 )
 
 type CommanderTestSuite struct {
 	Commander *Commander
 	suite.Suite
-}
-
-type MockedAddCommand struct {
-	commands.AddCommand
-	mock.Mock
 }
 
 func (suite *CommanderTestSuite) SetupTest() {
@@ -38,11 +31,11 @@ func (suite *CommanderTestSuite) TestNewCommander() {
 
 func (suite *CommanderTestSuite) TestFindCommand() {
 	command, err := suite.Commander.FindCommand("add this should return the add command!")
-	suite.Equal(new(commands.AddCommand), command, "This input should return the add command.")
+	suite.Equal(new(AddCommand), command, "This input should return the add command.")
 	suite.Nil(err, "A command was found, so an error shouldn't be returned.")
 
 	command, err = suite.Commander.FindCommand("CacheSize this should return the cachesize command.")
-	suite.Equal(new(commands.CacheSizeCommand), command, "This input should return the cachesize command.")
+	suite.Equal(new(CacheSizeCommand), command, "This input should return the cachesize command.")
 	suite.Nil(err, "A command was found, so an error shouldn't be returned.")
 
 	command, err = suite.Commander.FindCommand("fjdkasfjaskf this should not return a command.")
