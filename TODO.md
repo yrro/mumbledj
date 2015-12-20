@@ -18,8 +18,8 @@ MumbleDJ Refactor To-do List
     * [x] Implementation
     * [ ] Unit tests
   * help
-    * [ ] Implementation
-    * [ ] Unit tests
+    * [x] Implementation
+    * [x] Unit tests
   * kill
     * [ ] Implementation
     * [ ] Unit tests
