@@ -8,7 +8,13 @@
 package commands
 
 import (
+	"bytes"
+	"errors"
+	"fmt"
+	"strconv"
+
 	"github.com/layeh/gumble/gumble"
+	"github.com/matthieugrieger/mumbledj/audio"
 	"github.com/matthieugrieger/mumbledj/state"
 	"github.com/spf13/viper"
 )
@@ -34,5 +40,23 @@ func (c *ListTracksCommand) IsAdmin() bool {
 
 // Execute executes the command with the given bot state, user, and arguments.
 func (c *ListTracksCommand) Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, bool, error) {
-	return nil, "", false, nil
+	if len(state.Queue.Queue) == 0 {
+		return nil, "", true, errors.New("There are no tracks currently in the queue.")
+	}
+
+	numTracksToList := len(state.Queue.Queue)
+	if len(args) != 0 {
+		if parsedNum, err := strconv.Atoi(args[0]); err == nil {
+			numTracksToList = parsedNum
+		}
+	}
+
+	var buffer bytes.Buffer
+	state.Queue.Traverse(func(i int, track audio.Track) {
+		if i < numTracksToList {
+			buffer.WriteString(fmt.Sprintf("%d: \"%s\", added by <b>%s</b>.</br>", i+1, track.Title(), track.Submitter()))
+		}
+	})
+
+	return nil, buffer.String(), true, nil
 }
