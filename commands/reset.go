@@ -8,6 +8,9 @@
 package commands
 
 import (
+	"errors"
+	"fmt"
+
 	"github.com/layeh/gumble/gumble"
 	"github.com/matthieugrieger/mumbledj/state"
 	"github.com/spf13/viper"
@@ -34,5 +37,18 @@ func (c *ResetCommand) IsAdmin() bool {
 
 // Execute executes the command with the given bot state, user, and arguments.
 func (c *ResetCommand) Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, bool, error) {
-	return nil, "", false, nil
+	if len(state.Queue.Queue) == 0 {
+		return nil, "", true, errors.New("The queue is already empty.")
+	}
+
+	state.Queue.Queue = state.Queue.Queue[:0]
+	if state.AudioStream != nil {
+		state.AudioStream.Stop()
+	}
+
+	if err := state.Cache.DeleteAll(); err != nil {
+		return nil, "", true, err
+	}
+
+	return state, fmt.Sprintf("<b>%s</b> has reset the audio queue.", user.Name), false, nil
 }
