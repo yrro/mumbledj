@@ -8,6 +8,8 @@
 package commands
 
 import (
+	"os"
+
 	"github.com/layeh/gumble/gumble"
 	"github.com/matthieugrieger/mumbledj/state"
 	"github.com/spf13/viper"
@@ -34,5 +36,14 @@ func (c *KillCommand) IsAdmin() bool {
 
 // Execute executes the command with the given bot state, user, and arguments.
 func (c *KillCommand) Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, bool, error) {
-	return nil, "", false, nil
+	if err := state.Cache.DeleteAll(); err != nil {
+		return nil, "", true, err
+	}
+
+	if err := state.Client.Disconnect(); err != nil {
+		return nil, "", true, err
+	}
+
+	os.Exit(0)
+	return nil, "", true, nil
 }
