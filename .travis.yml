@@ -3,6 +3,9 @@ language: go
 go:
     - tip
 
+before_install:
+  - pip install --user codecov
+
 install:
     - go get github.com/layeh/gumble/gumble
     - go get github.com/layeh/gumble/gumbleffmpeg
@@ -13,3 +16,6 @@ install:
 branches:
     only:
         - refactor
+
+after_success:
+  - codecov
