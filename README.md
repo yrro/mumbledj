@@ -2,6 +2,8 @@ MumbleDJ
 ========
 **A Mumble bot that plays music fetched from YouTube videos and SoundCloud tracks.**
 
+[![Build Status](https://travis-ci.org/matthieugrieger/mumbledj.svg?branch=refactor)](https://travis-ci.org/matthieugrieger/mumbledj)
+
 * [Usage](#usage)
 * [Features](#features)
 * [Commands](#commands)
@@ -91,7 +93,7 @@ Effective April 20th, 2015, all requests to YouTube's API must use v3 of their A
 ###SOUNDCLOUD API KEYS
 A SoundCloud API key is required for SoundCloud integration. If no SoundCloud API key is found, then the service will be disabled (YouTube links will still work however).
 
-**1)** Login/signup for a SoundCloud account on [https://soundcloud.com](https://soundcloud.com) 
+**1)** Login/signup for a SoundCloud account on [https://soundcloud.com](https://soundcloud.com)
 
 **2)** Now to get the API key create a new app here: [http://soundcloud.com/you/apps/new](http://soundcloud.com/you/apps/new)
 
