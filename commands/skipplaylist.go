@@ -8,6 +8,9 @@
 package commands
 
 import (
+	"errors"
+	"fmt"
+
 	"github.com/layeh/gumble/gumble"
 	"github.com/matthieugrieger/mumbledj/state"
 	"github.com/spf13/viper"
@@ -34,5 +37,17 @@ func (c *SkipPlaylistCommand) IsAdmin() bool {
 
 // Execute executes the command with the given bot state, user, and arguments.
 func (c *SkipPlaylistCommand) Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, bool, error) {
-	return nil, "", false, nil
+	if len(state.Queue.Queue) == 0 {
+		return nil, "", true, errors.New("The queue is currently empty. There is no playlist to skip.")
+	}
+
+	if state.Queue.Queue[0].Playlist() == nil {
+		return nil, "", true, errors.New("The current track is not part of a playlist.")
+	}
+
+	if err := state.Skips.AddPlaylistSkip(user); err != nil {
+		return nil, "", true, errors.New("You have already voted to skip this playlist.")
+	}
+
+	return state, fmt.Sprintf("<b>%s</b> has voted to skip the current playlist.", user.Name), false, nil
 }
