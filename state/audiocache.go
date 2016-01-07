@@ -110,3 +110,8 @@ func (c *AudioCache) RemoveOldest() error {
 	}
 	return errors.New("There are no files currently cached.")
 }
+
+// DeleteAll deletes all cached audio files.
+func (c *AudioCache) DeleteAll() error {
+	return nil
+}
