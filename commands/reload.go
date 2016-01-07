@@ -35,5 +35,15 @@ func (c *ReloadCommand) IsAdmin() bool {
 
 // Execute executes the command with the given bot state, user, and arguments.
 func (c *ReloadCommand) Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, bool, error) {
-	return nil, "", false, nil
+	configFileLocation := ""
+	if len(args) >= 1 {
+		configFileLocation = args[0]
+	}
+
+	if err := state.BotConfig.LoadFromConfigFile(configFileLocation); err != nil {
+		return nil, "", true, err
+	}
+
+	// No state needs to be returned as Viper configurations are singletons.
+	return nil, "The configuration in the configuration file has been loaded successfully.", true, nil
 }
