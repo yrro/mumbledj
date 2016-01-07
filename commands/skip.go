@@ -8,6 +8,9 @@
 package commands
 
 import (
+	"errors"
+	"fmt"
+
 	"github.com/layeh/gumble/gumble"
 	"github.com/matthieugrieger/mumbledj/state"
 	"github.com/spf13/viper"
@@ -34,5 +37,13 @@ func (c *SkipCommand) IsAdmin() bool {
 
 // Execute executes the command with the given bot state, user, and arguments.
 func (c *SkipCommand) Execute(state *state.BotState, user *gumble.User, args ...string) (*state.BotState, string, bool, error) {
-	return nil, "", false, nil
+	if len(state.Queue.Queue) == 0 {
+		return nil, "", true, errors.New("The queue is currently empty. There is no track to skip.")
+	}
+
+	if err := state.Skips.AddTrackSkip(user); err != nil {
+		return nil, "", true, errors.New("You have already voted to skip this track.")
+	}
+
+	return state, fmt.Sprintf("<b>%s</b> has voted to skip the current track.", user.Name), false, nil
 }
