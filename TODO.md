@@ -21,10 +21,10 @@ MumbleDJ Refactor To-do List
     * [x] Implementation
     * [x] Unit tests
   * kill
-    * [ ] Implementation
+    * [x] Implementation
     * [ ] Unit tests
   * listtracks
-    * [ ] Implementation
+    * [x] Implementation
     * [ ] Unit tests
   * move
     * [x] Implementation
@@ -39,10 +39,10 @@ MumbleDJ Refactor To-do List
     * [x] Implementation
     * [x] Unit tests
   * reload
-    * [ ] Implementation
+    * [x] Implementation
     * [ ] Unit tests
   * reset
-    * [ ] Implementation
+    * [x] Implementation
     * [ ] Unit tests
   * setcomment
     * [x] Implementation
@@ -57,10 +57,10 @@ MumbleDJ Refactor To-do List
     * [x] Implementation
     * [x] Unit tests
   * skip
-    * [ ] Implementation
+    * [x] Implementation
     * [ ] Unit tests
   * skipplaylist
-    * [ ] Implementation
+    * [x] Implementation
     * [ ] Unit tests
   * volume
     * [x] Implementation
