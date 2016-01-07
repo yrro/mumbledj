@@ -1,0 +1,15 @@
+language: go
+
+go:
+    - tip
+
+install:
+    - go get github.com/layeh/gumble/gumble
+    - go get github.com/layeh/gumble/gumbleffmpeg
+    - go get github.com/layeh/gumble/gumbleutil
+    - go get github.com/spf13/viper
+    - go get github.com/stretchr/testify
+
+branches:
+    only:
+        - refactor
