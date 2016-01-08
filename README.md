@@ -2,7 +2,7 @@ MumbleDJ
 ========
 **A Mumble bot that plays music fetched from YouTube videos and SoundCloud tracks.**
 
-[![Build Status](https://travis-ci.org/matthieugrieger/mumbledj.svg?branch=refactor)](https://travis-ci.org/matthieugrieger/mumbledj)[![codecov.io](https://codecov.io/github/matthieugrieger/mumbledj/coverage.svg?branch=refactor)](https://codecov.io/github/matthieugrieger/mumbledj?branch=refactor)
+[![Build Status](https://travis-ci.org/matthieugrieger/mumbledj.svg?branch=refactor)](https://travis-ci.org/matthieugrieger/mumbledj) [![codecov.io](https://codecov.io/github/matthieugrieger/mumbledj/coverage.svg?branch=refactor)](https://codecov.io/github/matthieugrieger/mumbledj?branch=refactor)
 
 * [Usage](#usage)
 * [Features](#features)
