@@ -54,7 +54,7 @@ func (c *ListTracksCommand) Execute(state *state.BotState, user *gumble.User, ar
 	var buffer bytes.Buffer
 	state.Queue.Traverse(func(i int, track audio.Track) {
 		if i < numTracksToList {
-			buffer.WriteString(fmt.Sprintf("%d: \"%s\", added by <b>%s</b>.</br>", i+1, track.Title(), track.Submitter()))
+			buffer.WriteString(fmt.Sprintf("%d: \"%s\", added by <b>%s</b>.</br>", i+1, track.GetTitle(), track.GetSubmitter()))
 		}
 	})
 

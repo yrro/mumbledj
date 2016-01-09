@@ -41,7 +41,7 @@ func (c *ForceSkipPlaylistCommand) Execute(state *state.BotState, user *gumble.U
 		return nil, "", true, errors.New("The queue is currently empty. There are no tracks to skip.")
 	}
 
-	if state.Queue.Queue[0].Playlist() == nil {
+	if state.Queue.Queue[0].GetPlaylist() == nil {
 		return nil, "", true, errors.New("The current track is not part of a playlist.")
 	}
 

@@ -21,18 +21,18 @@ type MockedAudioTrack struct {
 	mock.Mock
 }
 
-// Title is a method that returns the title of the track.
-func (m *MockedAudioTrack) Title() string {
+// GetTitle is a method that returns the title of the track.
+func (m *MockedAudioTrack) GetTitle() string {
 	return "TestTrack"
 }
 
-// Submitter is a method that returns the submitter of the track.
-func (m *MockedAudioTrack) Submitter() string {
+// GetSubmitter is a method that returns the submitter of the track.
+func (m *MockedAudioTrack) GetSubmitter() string {
 	return "TestSubmitter"
 }
 
-// Service is a method that returns the service the track comes from.
-func (m *MockedAudioTrack) Service() string {
+// GetService is a method that returns the service the track comes from.
+func (m *MockedAudioTrack) GetService() string {
 	return "TestService"
 }
 

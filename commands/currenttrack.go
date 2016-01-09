@@ -43,5 +43,5 @@ func (c *CurrentTrackCommand) Execute(state *state.BotState, user *gumble.User, 
 
 	currentTrack := state.Queue.Queue[0]
 
-	return nil, fmt.Sprintf("The current track is <b>%s</b>, added by <b>%s</b>.", currentTrack.Title(), currentTrack.Submitter()), true, nil
+	return nil, fmt.Sprintf("The current track is <b>%s</b>, added by <b>%s</b>.", currentTrack.GetTitle(), currentTrack.GetSubmitter()), true, nil
 }

@@ -45,5 +45,5 @@ func (c *NextTrackCommand) Execute(state *state.BotState, user *gumble.User, arg
 
 	nextTrack := state.Queue.Queue[1]
 
-	return nil, fmt.Sprintf("The next track is <b>%s</b>, added by <b>%s</b>.", nextTrack.Title(), nextTrack.Submitter()), true, nil
+	return nil, fmt.Sprintf("The next track is <b>%s</b>, added by <b>%s</b>.", nextTrack.GetTitle(), nextTrack.GetSubmitter()), true, nil
 }
