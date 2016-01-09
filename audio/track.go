@@ -12,15 +12,16 @@ import "time"
 // Track is an interface that includes methods that perform necessary actions
 // on an audio track.
 type Track interface {
+	FetchMetadata() error
 	Download() error
-	Play()
 	Delete() error
-	Submitter() string
-	Title() string
-	ID() string
-	Filename() string
-	Duration() time.Duration
-	Thumbnail() string
-	Service() string
-	Playlist() Playlist
+	GetSubmitter() string
+	GetUploader() string
+	GetTitle() string
+	GetID() string
+	GetFilename() string
+	GetDuration() time.Duration
+	GetThumbnail() string
+	GetService() string
+	GetPlaylist() Playlist
 }
