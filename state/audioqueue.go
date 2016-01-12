@@ -33,11 +33,15 @@ func NewAudioQueue() *AudioQueue {
 	}
 }
 
-// AddTrack adds a Track to the AudioQueue.
-func (q *AudioQueue) AddTrack(t audio.Track) error {
+// AddTracks adds a number of Tracks to the AudioQueue.
+func (q *AudioQueue) AddTracks(t ...audio.Track) error {
 	beforeLen := len(q.Queue)
-	q.Queue = append(q.Queue, t)
-	if len(q.Queue) == beforeLen+1 {
+	tracksAdded := 0
+	for _, track := range t {
+		q.Queue = append(q.Queue, track)
+		tracksAdded++
+	}
+	if len(q.Queue) == beforeLen+tracksAdded {
 		return nil
 	}
 	return errors.New("Could not add Track to the AudioQueue.")
