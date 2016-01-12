@@ -102,10 +102,19 @@ func (q *AudioQueue) RandomNextTrack(queueWasEmpty bool) {
 
 // Skip performs the necessary actions that take place when a track is skipped via a command.
 func (q *AudioQueue) Skip() {
-
+	q.NextTrack()
 }
 
 // SkipPlaylist performs the necessary actions that take place when a playlist is skipped via a command.
 func (q *AudioQueue) SkipPlaylist() {
-
+	if q.Queue[0].GetPlaylist() != nil {
+		currentPlaylistID := q.Queue[0].GetPlaylist().GetID()
+		for i, track := range q.Queue {
+			if track.GetPlaylist() != nil {
+				if track.GetPlaylist().GetID() == currentPlaylistID {
+					q.Queue = append(q.Queue[:i], q.Queue[i+1:]...)
+				}
+			}
+		}
+	}
 }
