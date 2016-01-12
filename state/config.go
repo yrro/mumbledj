@@ -7,7 +7,12 @@
 
 package state
 
-import "github.com/spf13/viper"
+import (
+	"strings"
+
+	"github.com/spf13/pflag"
+	"github.com/spf13/viper"
+)
 
 // Config is a struct that gathers all logic related to configuration via
 // environment variables, commandline arguments, and configuration files.
@@ -132,16 +137,56 @@ func (c *Config) SetDefaultConfiguration() {
 // LoadFromConfigFile loads configuration values from the filepath specified via
 // the filepath argument.
 func (c *Config) LoadFromConfigFile(filepath string) error {
+	path := c.ConfigFileLocation
+	if filepath != "" {
+		path = filepath
+	}
+
+	filename := path[strings.LastIndex(path, "/")+1 : strings.LastIndex(path, ".")]
+	viperPath := path[:strings.LastIndex(path, "/")]
+
+	viper.SetConfigName(filename)
+	viper.AddConfigPath(viperPath)
+	if err := viper.ReadInConfig(); err != nil {
+		return err
+	}
+	viper.WatchConfig()
+
 	return nil
 }
 
-// LoadFromEnvironmentVariables loads configuration values from environment
-// variables.
-func (c *Config) LoadFromEnvironmentVariables() error {
+// SetupEnvironmentVariables performs setup operations to link environment variables (if used)
+// to viper configuration values.
+func (c *Config) SetupEnvironmentVariables() error {
 	return nil
 }
 
 // LoadFromCommandline loads configuration values from the commandline.
-func (c *Config) LoadFromCommandline() error {
-	return nil
+func (c *Config) LoadFromCommandline() {
+	var address, username, password, channel, pemCert, pemKey, accessTokens, player string
+	var insecure bool
+	var port int
+
+	pflag.StringVar(&address, "address", "localhost", "address for Mumble server")
+	pflag.IntVar(&port, "port", 64738, "port for Mumble server")
+	pflag.StringVar(&username, "username", "MumbleDJ", "username of MumbleDJ on server")
+	pflag.StringVar(&password, "password", "", "password for Mumble server (if needed)")
+	pflag.StringVar(&channel, "channel", "root", "default channel for MumbleDJ")
+	pflag.StringVar(&pemCert, "cert", "", "path to user PEM certificate for MumbleDJ")
+	pflag.StringVar(&pemKey, "key", "", "path to user PEM key for MumbleDJ")
+	pflag.StringVar(&accessTokens, "accesstokens", "", "list of access tokens for channel authentication")
+	pflag.StringVar(&player, "player", "ffmpeg", "player command to use to play audio files")
+	pflag.BoolVar(&insecure, "insecure", false, "skip certificate checking")
+	pflag.Parse()
+
+	viper.Set("connection.address", address)
+	viper.Set("connection.port", port)
+	viper.Set("connection.username", username)
+	viper.Set("connection.password", password)
+	viper.Set("general.defaultchannel", strings.Split(channel, "/"))
+	viper.Set("connection.cert", pemCert)
+	viper.Set("connection.key", pemKey)
+	viper.Set("connection.accesstokens", strings.Split(accessTokens, ","))
+	viper.Set("general.playercommand", player)
+	viper.Set("connection.insecure", insecure)
 }
