@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"sort"
 	"time"
 
@@ -113,5 +114,21 @@ func (c *AudioCache) RemoveOldest() error {
 
 // DeleteAll deletes all cached audio files.
 func (c *AudioCache) DeleteAll() error {
+	dir, err := os.Open(viper.GetString("cache.directory"))
+	if err != nil {
+		return err
+	}
+
+	defer dir.Close()
+	names, err := dir.Readdirnames(-1)
+	if err != nil {
+		return err
+	}
+	for _, name := range names {
+		err = os.RemoveAll(filepath.Join(viper.GetString("cache.directory"), name))
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
