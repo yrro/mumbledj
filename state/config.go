@@ -8,6 +8,7 @@
 package state
 
 import (
+	"errors"
 	"strings"
 
 	"github.com/spf13/pflag"
@@ -142,17 +143,21 @@ func (c *Config) LoadFromConfigFile(filepath string) error {
 		path = filepath
 	}
 
-	filename := path[strings.LastIndex(path, "/")+1 : strings.LastIndex(path, ".")]
-	viperPath := path[:strings.LastIndex(path, "/")]
+	if path != "" {
+		filename := path[strings.LastIndex(path, "/")+1 : strings.LastIndex(path, ".")]
+		viperPath := path[:strings.LastIndex(path, "/")]
 
-	viper.SetConfigName(filename)
-	viper.AddConfigPath(viperPath)
-	if err := viper.ReadInConfig(); err != nil {
-		return err
+		viper.SetConfigName(filename)
+		viper.AddConfigPath(viperPath)
+		if err := viper.ReadInConfig(); err != nil {
+			return err
+		}
+		viper.WatchConfig()
+
+		return nil
 	}
-	viper.WatchConfig()
 
-	return nil
+	return errors.New("No configuration file specified.")
 }
 
 // SetupEnvironmentVariables performs setup operations to link environment variables (if used)
@@ -163,7 +168,7 @@ func (c *Config) SetupEnvironmentVariables() error {
 
 // LoadFromCommandline loads configuration values from the commandline.
 func (c *Config) LoadFromCommandline() {
-	var address, username, password, channel, pemCert, pemKey, accessTokens, player string
+	var address, username, password, channel, pemCert, pemKey, accessTokens, player, configPath string
 	var insecure bool
 	var port int
 
@@ -177,6 +182,7 @@ func (c *Config) LoadFromCommandline() {
 	pflag.StringVar(&accessTokens, "accesstokens", "", "list of access tokens for channel authentication")
 	pflag.StringVar(&player, "player", "ffmpeg", "player command to use to play audio files")
 	pflag.BoolVar(&insecure, "insecure", false, "skip certificate checking")
+	pflag.StringVar(&configPath, "config", "", "path to optional configuration file")
 	pflag.Parse()
 
 	viper.Set("connection.address", address)
@@ -189,4 +195,6 @@ func (c *Config) LoadFromCommandline() {
 	viper.Set("connection.accesstokens", strings.Split(accessTokens, ","))
 	viper.Set("general.playercommand", player)
 	viper.Set("connection.insecure", insecure)
+
+	c.ConfigFileLocation = configPath
 }
