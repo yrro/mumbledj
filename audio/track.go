@@ -16,7 +16,7 @@ type Track interface {
 	Download() error
 	Delete() error
 	GetSubmitter() string
-	GetUploader() string
+	GetAuthor() string
 	GetTitle() string
 	GetID() string
 	GetFilename() string

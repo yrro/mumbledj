@@ -23,7 +23,7 @@ import (
 // Track is a struct that represents the metadata of a YouTube track.
 type Track struct {
 	Submitter        string
-	Uploader         string
+	Author           string
 	Title            string
 	ID               string
 	Filename         string
@@ -68,7 +68,7 @@ func (t *Track) FetchMetadata() error {
 	t.Thumbnail, _ = value.GetString("items", "0", "snippet", "thumbnails", "high", "url")
 	durationString, _ := value.GetString("items", "0", "contentDetails", "duration")
 	t.Duration, _ = parseDurationString(durationString, `P(?P<days>\d+D)?T(?P<hours>\d+H)?(?P<minutes>\d+M)?(?P<seconds>\d+S)?`)
-	t.Uploader, _ = value.GetString("items", "0", "snippet", "channelTitle")
+	t.Author, _ = value.GetString("items", "0", "snippet", "channelTitle")
 
 	return nil
 }
@@ -90,9 +90,9 @@ func (t *Track) GetSubmitter() string {
 	return t.Submitter
 }
 
-// GetUploader returns the name of the uploader of the YouTube track.
-func (t *Track) GetUploader() string {
-	return t.Uploader
+// GetAuthor returns the name of the author of the YouTube track.
+func (t *Track) GetAuthor() string {
+	return t.Author
 }
 
 // GetTitle returns the title of the YouTube track.

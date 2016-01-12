@@ -7,7 +7,14 @@
 
 package youtube
 
-import "github.com/layeh/gumble/gumble"
+import (
+	"fmt"
+	"net/http"
+
+	"github.com/antonholmquist/jason"
+	"github.com/layeh/gumble/gumble"
+	"github.com/spf13/viper"
+)
 
 // Playlist is a struct that contains metadata related to a YouTube playlist.
 type Playlist struct {
@@ -17,12 +24,10 @@ type Playlist struct {
 	Submitter string
 }
 
-// NewPlaylist returns a YouTube playlist struct with the provided ID and
-// title.
-func NewPlaylist(id, title string, submitter *gumble.User) *Playlist {
+// NewPlaylist returns a YouTube playlist struct with the provided ID.
+func NewPlaylist(id string, submitter *gumble.User) *Playlist {
 	return &Playlist{
 		ID:        id,
-		Title:     title,
 		Submitter: submitter.Name,
 	}
 }
@@ -30,6 +35,20 @@ func NewPlaylist(id, title string, submitter *gumble.User) *Playlist {
 // FetchMetadata makes an API call to the YouTube API to fill in the metadata
 // about this particular playlist.
 func (p *Playlist) FetchMetadata() error {
+	var response *http.Response
+	var value *jason.Object
+	var err error
+	if response, err = http.Get(fmt.Sprintf("https://www.googleapis.com/youtube/v3/playlists?part=snippet&id=%s&key=%s",
+		p.ID, viper.GetString("api.youtubekey"))); err != nil {
+		return err
+	}
+	if value, err = jason.NewObjectFromReader(response.Body); err != nil {
+		return err
+	}
+
+	p.Title, _ = value.GetString("items", "0", "snippet", "title")
+	p.Author, _ = value.GetString("items", "0", "snippet", "channelTitle")
+
 	return nil
 }
 
