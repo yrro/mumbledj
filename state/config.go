@@ -27,6 +27,7 @@ func (c *Config) SetDefaultConfiguration() {
 	viper.SetDefault("general.maxtrackduration", 0)
 	viper.SetDefault("general.maxtracksperplaylist", 50)
 	viper.SetDefault("general.automaticshuffleon", false)
+	viper.SetDefault("general.playercommand", "ffmpeg")
 
 	// Connection configuration
 	viper.SetDefault("connection.address", "127.0.0.1")

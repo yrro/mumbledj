@@ -34,6 +34,7 @@ func (suite *ConfigTestSuite) TestDefaultConfiguration() {
 	suite.Zero(viper.GetInt("general.maxtrackduration"))
 	suite.Equal(50, viper.GetInt("general.maxtracksperplaylist"))
 	suite.False(viper.GetBool("general.automaticshuffleon"))
+	suite.Equal("ffmpeg", viper.GetString("general.playercommand"))
 
 	suite.Equal("127.0.0.1", viper.GetString("connection.address"))
 	suite.Equal(64738, viper.GetInt("connection.port"))
