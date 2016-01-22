@@ -10,5 +10,7 @@ package audio
 // Handler is an interface for a struct that handles an incoming URL and
 // returns a slice of tracks associated with it.
 type Handler interface {
+	AddService(string)
+	GetAvailableServices() []string
 	GetTracks(string) ([]Track, error)
 }
