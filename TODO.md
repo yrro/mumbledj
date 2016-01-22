@@ -83,18 +83,18 @@ MumbleDJ Refactor To-do List
     * [ ] Unit tests
   * Config
     * [x] Default values
-    * [ ] Commandline overrides
+    * [x] Commandline overrides
     * [ ] Environment variable overrides
-    * [ ] Config file overrides
+    * [x] Config file overrides
     * [ ] Unit tests
   * MumbleDJ
     * [ ] Startup checks
-    * [ ] Mumble server connection
+    * [x] Mumble server connection
     * [x] Gumble event listener implementation
 * Audio
   * YouTube
-    * [ ] Tracks
-    * [ ] Playlists
+    * [x] Tracks
+    * [x] Playlists
   * SoundCloud
     * [ ] Tracks
     * [ ] Playlists
