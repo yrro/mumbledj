@@ -8,11 +8,15 @@
 package main
 
 import (
+	"crypto/tls"
 	"fmt"
+	"log"
+	"os"
 	"time"
 
 	"github.com/layeh/gumble/gumble"
 	"github.com/layeh/gumble/gumbleutil"
+	"github.com/matthieugrieger/mumbledj/audio"
 	"github.com/matthieugrieger/mumbledj/commands"
 	"github.com/matthieugrieger/mumbledj/state"
 	"github.com/spf13/viper"
@@ -20,10 +24,9 @@ import (
 
 // MumbleDJ is a struct that keeps track of all aspects of the bot's state.
 type MumbleDJ struct {
-	GumbleConfig gumble.Config
-	KeepAlive    chan bool
-	Commander    *commands.Commander
-	State        *state.BotState
+	KeepAlive chan bool
+	Commander *commands.Commander
+	State     *state.BotState
 }
 
 // OnConnect event. First moves MumbleDJ into default channel if one exists. The
@@ -110,12 +113,97 @@ func (dj *MumbleDJ) SendPrivateMessage(user *gumble.User, message string) {
 	}
 }
 
-// Start attempts to connect the bot to the server and performs necessary startup
-// operations.
-func (dj *MumbleDJ) Start() error {
-	return nil
+// CheckAPIKeys checks the configuration for API keys. If no API keys are found
+// an error is returned as MumbleDJ will not do anything without API keys.
+func (dj *MumbleDJ) CheckAPIKeys() {
+	anyDisabled := false
+
+	// Check for YouTube API key.
+	if viper.GetString("api.youtubekey") == "" {
+		anyDisabled = true
+		dj.State.Log.Println("The YouTube service has been disabled as you do not have a YouTube API key defined in your config file.")
+	} else {
+		dj.State.Handler.AddService("YouTube")
+	}
+
+	// Checks for SoundCloud API key.
+	if viper.GetString("api.soundcloudkey") == "" {
+		anyDisabled = true
+		dj.State.Log.Println("The SoundCloud service has been disabled as you do not have a SoundCloud API key defined in your config file.")
+	} else {
+		dj.State.Handler.AddService("SoundCloud")
+	}
+
+	// Check to see if any service was disabled. If so, display a help message.
+	if anyDisabled {
+		dj.State.Log.Println("Please see the following link for information on how to enable missing services: https://github.com/matthieugrieger/mumbledj.")
+	}
+
+	// Exits application if no services are enabled.
+	if len(dj.State.Handler.GetAvailableServices()) == 0 {
+		dj.State.Log.Fatalln("No services are enabled, meaning MumbleDJ cannot do anything. Exiting...")
+	}
 }
 
 func main() {
+	// Initialize MumbleDJ and its data structures.
+	dj := new(MumbleDJ)
 
+	dj.Commander = commands.NewCommander()
+
+	dj.State = new(state.BotState)
+	dj.State.BotConfig = new(state.Config)
+	dj.State.Queue = state.NewAudioQueue()
+	dj.State.Cache = state.NewAudioCache()
+	dj.State.Skips = state.NewSkipTracker()
+	dj.State.Handler = new(audio.ServiceHandler)
+	dj.State.Log = log.New(os.Stderr, "MumbleDJ", 0)
+
+	// Initialize MumbleDJ config with default values and values provided by the user.
+	dj.State.BotConfig.SetDefaultConfiguration()
+	dj.State.BotConfig.LoadFromCommandline()
+	dj.State.BotConfig.LoadFromConfigFile("")
+
+	// Create Gumble config.
+	dj.State.GumbleConfig = &gumble.Config{
+		Username: viper.GetString("connection.username"),
+		Password: viper.GetString("connection.password"),
+		Address:  fmt.Sprintf("%s:%d", viper.GetString("connection.address"), viper.GetInt("connection.port")),
+		Tokens:   viper.GetStringSlice("connection.accesstokens"),
+	}
+
+	// Create Gumble client.
+	dj.State.Client = gumble.NewClient(dj.State.GumbleConfig)
+
+	// Initialize key pair if needed.
+	dj.State.GumbleConfig.TLSConfig.InsecureSkipVerify = true
+	if !viper.GetBool("connection.insecure") {
+		gumbleutil.CertificateLockFile(dj.State.Client, fmt.Sprintf("%s/.mumbledjcert.lock", os.Getenv("HOME")))
+	}
+	if viper.GetString("connection.cert") != "" {
+		if viper.GetString("connection.key") == "" {
+			viper.Set("connection.key", viper.GetString("connection.cert"))
+		}
+		if certificate, err := tls.LoadX509KeyPair(viper.GetString("connection.cert"), viper.GetString("connection.key")); err != nil {
+			panic(err)
+		} else {
+			dj.State.GumbleConfig.TLSConfig.Certificates = append(dj.State.GumbleConfig.TLSConfig.Certificates, certificate)
+		}
+	}
+
+	dj.CheckAPIKeys()
+
+	dj.State.Client.Attach(gumbleutil.Listener{
+		Connect:     dj.OnConnect,
+		Disconnect:  dj.OnDisconnect,
+		TextMessage: dj.OnTextMessage,
+		UserChange:  dj.OnUserChange,
+	})
+	dj.State.Client.Attach(gumbleutil.AutoBitrate)
+
+	if err := dj.State.Client.Connect(); err != nil {
+		dj.State.Log.Fatalf("Could not connect to Mumble server at %s:%d.\n", viper.GetString("connection.address"), viper.GetInt("connection.port"))
+	}
+
+	<-dj.KeepAlive
 }
