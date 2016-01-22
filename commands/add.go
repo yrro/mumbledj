@@ -59,7 +59,7 @@ func (c *AddCommand) Execute(state *state.BotState, user *gumble.User, args ...s
 	addString := fmt.Sprintf("<b>%s</b> added <b>%d</b> tracks to the queue:</br>", user.Name, len(allTracks))
 
 	for _, track := range allTracks {
-		state.Queue.AddTrack(track)
+		state.Queue.AddTracks(track)
 		addString += fmt.Sprintf("\"%s\" from %s</br>", track.GetTitle(), track.GetService())
 	}
 

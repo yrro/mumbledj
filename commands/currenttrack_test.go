@@ -55,7 +55,7 @@ func (suite *CurrentTrackCommandTestSuite) TestExecuteWhenQueueIsEmpty() {
 }
 
 func (suite *CurrentTrackCommandTestSuite) TestExecuteWhenQueueNotEmpty() {
-	suite.State.Queue.AddTrack(new(testutils.MockedAudioTrack))
+	suite.State.Queue.AddTracks(new(testutils.MockedAudioTrack))
 
 	state, message, isPrivateMessage, err := suite.Command.Execute(suite.State, nil)
 

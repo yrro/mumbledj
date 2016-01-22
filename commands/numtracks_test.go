@@ -54,7 +54,7 @@ func (suite *NumTracksCommandTestSuite) TestExecute() {
 	suite.True(isPrivateMessage, "This should be a private message.")
 	suite.Nil(err, "No error should be returned.")
 
-	suite.State.Queue.AddTrack(new(testutils.MockedAudioTrack))
+	suite.State.Queue.AddTracks(new(testutils.MockedAudioTrack))
 
 	state, message, isPrivateMessage, err = suite.Command.Execute(suite.State, nil)
 
@@ -64,7 +64,7 @@ func (suite *NumTracksCommandTestSuite) TestExecute() {
 	suite.True(isPrivateMessage, "This should be a private message.")
 	suite.Nil(err, "No error should be returned.")
 
-	suite.State.Queue.AddTrack(new(testutils.MockedAudioTrack))
+	suite.State.Queue.AddTracks(new(testutils.MockedAudioTrack))
 
 	state, message, isPrivateMessage, err = suite.Command.Execute(suite.State, nil)
 

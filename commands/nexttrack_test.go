@@ -55,7 +55,7 @@ func (suite *NextTrackCommandTestSuite) TestExecuteWhenQueueIsEmpty() {
 }
 
 func (suite *NextTrackCommandTestSuite) TestExecuteWhenQueueHasOneItem() {
-	suite.State.Queue.AddTrack(new(testutils.MockedAudioTrack))
+	suite.State.Queue.AddTracks(new(testutils.MockedAudioTrack))
 
 	state, message, isPrivateMessage, err := suite.Command.Execute(suite.State, nil)
 
@@ -66,8 +66,8 @@ func (suite *NextTrackCommandTestSuite) TestExecuteWhenQueueHasOneItem() {
 }
 
 func (suite *NextTrackCommandTestSuite) TestExecuteWhenQueueHasTwoOrMoreItems() {
-	suite.State.Queue.AddTrack(new(testutils.MockedAudioTrack))
-	suite.State.Queue.AddTrack(new(testutils.MockedAudioTrack))
+	suite.State.Queue.AddTracks(new(testutils.MockedAudioTrack))
+	suite.State.Queue.AddTracks(new(testutils.MockedAudioTrack))
 
 	state, message, isPrivateMessage, err := suite.Command.Execute(suite.State, nil)
 

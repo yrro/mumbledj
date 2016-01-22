@@ -55,7 +55,7 @@ func (suite *ShuffleCommandTestSuite) TestExecuteWithEmptyQueue() {
 }
 
 func (suite *ShuffleCommandTestSuite) TestExecuteWithNotEnoughTracks() {
-	suite.State.Queue.AddTrack(new(testutils.MockedAudioTrack))
+	suite.State.Queue.AddTracks(new(testutils.MockedAudioTrack))
 
 	state, message, isPrivateMessage, err := suite.Command.Execute(suite.State, nil)
 	suite.Equal(1, len(suite.State.Queue.Queue))
@@ -64,7 +64,7 @@ func (suite *ShuffleCommandTestSuite) TestExecuteWithNotEnoughTracks() {
 	suite.True(isPrivateMessage, "This should be a private message.")
 	suite.NotNil(err, "An error should be returned for attempting to shuffle a queue with only one track.")
 
-	suite.State.Queue.AddTrack(new(testutils.MockedAudioTrack))
+	suite.State.Queue.AddTracks(new(testutils.MockedAudioTrack))
 
 	state, message, isPrivateMessage, err = suite.Command.Execute(suite.State, nil)
 	suite.Equal(2, len(suite.State.Queue.Queue))
@@ -75,9 +75,9 @@ func (suite *ShuffleCommandTestSuite) TestExecuteWithNotEnoughTracks() {
 }
 
 func (suite *ShuffleCommandTestSuite) TestExecuteWithValidQueue() {
-	suite.State.Queue.AddTrack(new(testutils.MockedAudioTrack))
-	suite.State.Queue.AddTrack(new(testutils.MockedAudioTrack))
-	suite.State.Queue.AddTrack(new(testutils.MockedAudioTrack))
+	suite.State.Queue.AddTracks(new(testutils.MockedAudioTrack))
+	suite.State.Queue.AddTracks(new(testutils.MockedAudioTrack))
+	suite.State.Queue.AddTracks(new(testutils.MockedAudioTrack))
 
 	state, message, isPrivateMessage, err := suite.Command.Execute(suite.State, nil)
 	suite.Equal(3, len(suite.State.Queue.Queue))
