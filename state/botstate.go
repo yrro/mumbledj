@@ -26,5 +26,5 @@ type BotState struct {
 	Cache        *AudioCache
 	Skips        *SkipTracker
 	Handler      audio.Handler
-	Log          log.Logger
+	Log          *log.Logger
 }
