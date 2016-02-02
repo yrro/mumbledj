@@ -96,8 +96,8 @@ MumbleDJ Refactor To-do List
     * [x] Tracks
     * [x] Playlists
   * SoundCloud
-    * [ ] Tracks
-    * [ ] Playlists
+    * [x] Tracks
+    * [x] Playlists
   * AudioHandler
     * [ ] Implement GetTracks
     * [ ] Unit tests
