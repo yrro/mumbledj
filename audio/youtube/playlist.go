@@ -53,7 +53,7 @@ func (p *Playlist) FetchMetadata() error {
 
 	// Fetch track metadata.
 	maxItemsPerPage := 50
-	maxTracks := 0
+	maxTracks := 999999
 	if maxTracks = viper.GetInt("general.maxtracksperplaylist"); maxTracks < 50 && maxTracks != 0 {
 		maxItemsPerPage = maxTracks
 	}
@@ -62,6 +62,7 @@ func (p *Playlist) FetchMetadata() error {
 		ID:        p.ID,
 		Submitter: p.Submitter,
 	}
+
 	for len(p.Tracks) < maxTracks {
 		if response, err = http.Get(fmt.Sprintf("https://www.googleapi.com/youtube/v3/playlistItems?part=snippet&maxResults=%d&playlistId=%s&pageToken=%s&key=%s",
 			maxItemsPerPage, p.ID, pageToken, viper.GetString("api.youtubekey"))); err != nil {
