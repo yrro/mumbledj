@@ -7,7 +7,16 @@
 
 package soundcloud
 
-import "time"
+import (
+	"fmt"
+	"net/http"
+	"strconv"
+	"strings"
+	"time"
+
+	"github.com/antonholmquist/jason"
+	"github.com/spf13/viper"
+)
 
 // Track is a struct that represents the metadata of a SoundCloud track.
 type Track struct {
@@ -26,7 +35,16 @@ type Track struct {
 // name of the submitter, ID of the Track, and the playlist it is associated with
 // if any.
 func NewTrack(submitter, id, offset string, playlist Playlist) (*Track, error) {
-	var parsedOffset time.Duration
+	timesplit := strings.Split(offset, ":")
+	offsetSeconds := 0
+	multiplier := 1
+	for i := len(timesplit) - 1; i >= 0; i-- {
+		time, _ := strconv.Atoi(timesplit[i])
+		offsetSeconds += time * multiplier
+		multiplier *= 60
+	}
+
+	parsedOffset, _ := time.ParseDuration(fmt.Sprintf("%ds", offsetSeconds))
 
 	return &Track{
 		Submitter:        submitter,
@@ -39,6 +57,27 @@ func NewTrack(submitter, id, offset string, playlist Playlist) (*Track, error) {
 // FetchMetadata makes an API call to the SoundCloud API to fill in the metadata
 // about this particular track.
 func (t *Track) FetchMetadata() error {
+	var response *http.Response
+	var value *jason.Object
+	var err error
+	if response, err = http.Get(fmt.Sprintf("http://api.soundcloud.com/resolve?url=%s&client_id=%s",
+		t.ID, viper.GetString("api.soundcloudkey"))); err != nil {
+		return err
+	}
+	if value, err = jason.NewObjectFromReader(response.Body); err != nil {
+		return err
+	}
+
+	t.Title, _ = value.GetString("title")
+	durationMilliseconds, _ := value.GetInt64("duration")
+	t.Duration, _ = time.ParseDuration(fmt.Sprintf("%dms", durationMilliseconds))
+	t.Author, _ = value.GetString("user", "username")
+	t.Thumbnail, err = value.GetString("artwork_url")
+	if err != nil {
+		// Track has no artwork, using profile avatar instead.
+		t.Thumbnail, _ = value.GetString("user", "avatar_url")
+	}
+
 	return nil
 }
 
