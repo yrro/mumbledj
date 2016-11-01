@@ -1,0 +1,4 @@
+# This has to be set to something to prevent dpkg-source from excluding the
+# .git directory from the source package, which is necessary for generating
+# the changelog.
+tar-ignore = dummy-value-please-igore

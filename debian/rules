@@ -1,0 +1,33 @@
+#!/usr/bin/make -f
+
+export GOPATH := $(abspath debian/build)
+
+%:
+	dh $@
+
+clean:
+	rm -f debian/changelog
+	EDITOR=true VISUAL=true dch --create --package=mumbledj --newversion=$$(git describe --tags | sed -e s/^v// | sed -e s/-/+/g) 'Auto-generated changelog entry; do not commit'
+	dh clean
+
+override_dh_auto_clean:
+	rm -rf debian/build
+	dh_auto_clean
+
+override_dh_auto_configure:
+	mkdir -p $(GOPATH)/src/github.com/matthieugrieger
+	ln -srf -T . $(GOPATH)/src/github.com/matthieugrieger/mumbledj
+
+override_dh_auto_build:
+	#cd $(GOPATH)/src/github.com/matthieugrieger/mumbledj && make
+	cd $(GOPATH)/src/github.com/matthieugrieger/mumbledj && GO15VENDOREXPERIMENT=1 go build -v -x .
+
+override_dh_auto_test:
+	cd $(GOPATH)/src/github.com/matthieugrieger/mumbledj && make test
+
+override_dh_auto_install:
+	:
+
+override_dh_fixperms:
+	dh_fixperms
+	chmod 0640 debian/mumbledj/etc/mumbledj.yaml

@@ -1,0 +1,131 @@
+.TH MUMBLEDJ 1 3.2.1
+.SH NAME
+mumbledj \- a Mumble bot that plays music fetched from YouTube videos and SoundCloud tracks
+.SH SYNOPSIS
+.SY mumbledj
+.OP \-\-config file
+.OP \-c file
+.OP \-\-server address
+.OP \-s address
+.OP \-\-port port
+.OP \-o port
+.OP \-\-username username
+.OP \-u username
+.OP \-\-password password
+.OP \-p password
+.OP \-\-channel channel
+.OP \-n channel
+.OP \-\-p12 file
+.OP \-\-cert pemCert
+.OP \-e pemCert
+.OP \-\-key pemKey
+.OP \-k pemKey
+.OP \-\-accesstokens token1 token2
+.OP \-\-insecure
+.OP \-i
+.OP \-\-debug
+.OP \-d
+.SY
+.SY mumbledj
+.OP \-\-help
+.OP \-h
+.YS
+.SY mumbledj
+.OP \-\-version
+.OP \-v
+.YS
+.SH OPTIONS
+.TP
+.BI "\-\-config " file
+.TQ
+.BI "\-c " file
+Path to configuration file. If unspecified, 
+.IB $HOME /.config/mumbledj/config.yaml
+is used.
+.TP
+.BI "\-\-server " address
+.TQ
+.BI "\-s " address
+.TQ
+.BI "\-\-port " port
+.TQ
+.BI "\-o " port
+Address and port number for Mumble server.
+If unspecified, taken from config file.
+.TP
+.BI "\-\-username " username
+.TQ
+.BI \-u \ username
+Usename for the bot.
+If unspecified, taken from config file.
+.TP
+.BI "\-password " password
+The password for the Mumble server.
+If unspecified, taken from config file.
+.TP
+.BI "\-\-channel " channel
+Channel joined by the bot.
+If unspecified, taken from config file.
+.TP
+.BI "\-\-p12 " file
+Path to p12 file for authenticating as a registered user
+.TP
+.BI "\-\-cert " pemCert
+.TQ
+.BI "\-e " pemCert
+.TQ
+.BI "\-key " pemKey
+.TQ
+.BI "\-k " pemKey
+Paths to files containing a client certificate and key in PEM format.
+If unspecified, taken from config file.
+.TP
+.BI "\-\-accesstokens " tokens
+.TQ
+.BI "\-a " tokens
+List of access tokens separated by spaces.
+Take care to use correct quoting when launching
+.B mumbledj
+from a shell.
+If unspecified, taken from config file.
+.TP
+.B \-\-insecure
+.TQ
+.B \-i
+Causes the bot to not check the server certificate.
+Can also be specified in the config file.
+Try using this if you have connection issues.
+.TP
+.B \-\-debug
+.TQ
+.B \-d
+Increase log verbosity.
+Try using this if you have connection issues.
+.TP
+.B \-\-help
+.TQ
+.B \-h
+Print a summary of options and then exit.
+.TP
+.B \-\-version
+.TQ
+.B \-v
+Print the version number and then exit.
+.SH SEE ALSO
+.UR file:///usr/share/doc/mumbledj/README.md.gz
+Local copy of full documentation
+.UE .
+.P
+.UR file:///usr/share/doc/mumbledj/README.Debian
+Notes about the Debian packaging of MumbleDJ
+.UE ,
+including an example of how to configure
+.BR systemd (1)
+to run MumbleDJ with the options described above.
+.P
+.UR https://github.com/matthieugrieger/mumbledj
+Project home page
+.UE ,
+including an up-to-date copy of
+.B README.md
+(which may not match the version locally deployed).

@@ -1,0 +1,5 @@
+# Undo pattern from top-level .gitignore
+!mumbledj*
+
+/changelog
+/*.debhelper.log
